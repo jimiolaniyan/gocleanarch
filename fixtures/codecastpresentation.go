@@ -21,3 +21,12 @@ func (c codecastPresentation) ClearCodecasts() bool {
 	}
 	return len(AGateway.FindAllCodecasts()) == 0
 }
+
+func (c codecastPresentation) LoginUser(username string) bool {
+	return false
+}
+
+func (c codecastPresentation) AddUser(username string) bool {
+	AGateway.SaveUser(&User{Username:username})
+	return true
+}

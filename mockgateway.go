@@ -2,13 +2,14 @@ package gocleanarch
 
 type MockGateway struct {
 	codecasts []*Codecast
+	users []*User
 }
 
 func NewMockGateway() *MockGateway{
 	 return &MockGateway{codecasts: []*Codecast{}}
 }
 
-func (m *MockGateway) Save(codecast *Codecast) {
+func (m *MockGateway) SaveCodecast(codecast *Codecast) {
 	m.codecasts = append(m.codecasts, codecast)
 }
 
@@ -18,8 +19,12 @@ func (m *MockGateway) FindAllCodecasts() []*Codecast {
 
 func (m *MockGateway) Delete(codecast *Codecast) {
 	for i, cc := range m.codecasts {
-		if cc.title == codecast.title {
+		if cc.Title == codecast.Title {
 			m.codecasts = append(m.codecasts[:i], m.codecasts[i+1:]...)
 		}
 	}
+}
+
+func (m *MockGateway) SaveUser(user *User) {
+	m.users = append(m.users, user)
 }
