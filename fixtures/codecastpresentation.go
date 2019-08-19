@@ -6,6 +6,7 @@ import (
 
 type codecastPresentation struct {
 	gateKeeper GateKeeper
+	useCase PresentCodecastUseCase
 }
 
 func NewCodecastPresentation() *codecastPresentation {
@@ -43,5 +44,6 @@ func (c *codecastPresentation) PresentationUser() string {
 }
 
 func (c *codecastPresentation) CountOfCodecastsPresented() int {
-	return -1
+	presentations := c.useCase.PresentCodecasts(c.gateKeeper.LoggedInUser())
+	return len(presentations)
 }
