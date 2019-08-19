@@ -1,5 +1,6 @@
 package gocleanarch
 
+// MockGateway is a mock implementation of the Gateway
 type MockGateway struct {
 	codecasts []*Codecast
 	users []*User
