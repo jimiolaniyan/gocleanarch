@@ -1,10 +1,12 @@
 package fixtures
 
 import (
+	"fmt"
 	. "github.com/jimiolaniyan/gocleanarch"
 )
 
 type codecastPresentation struct {
+	GateKeeper GateKeeper
 }
 
 func NewCodecastPresentation() *codecastPresentation {
@@ -23,7 +25,14 @@ func (c codecastPresentation) ClearCodecasts() bool {
 }
 
 func (c codecastPresentation) LoginUser(username string) bool {
-	return false
+	user := AGateway.FindUser(username)
+	fmt.Println(user)
+	if user != nil {
+		c.GateKeeper.SetLoggedInUser(user)
+		return true
+	} else {
+		return false
+	}
 }
 
 func (c codecastPresentation) AddUser(username string) bool {

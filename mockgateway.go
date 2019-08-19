@@ -28,3 +28,12 @@ func (m *MockGateway) Delete(codecast *Codecast) {
 func (m *MockGateway) SaveUser(user *User) {
 	m.users = append(m.users, user)
 }
+
+func (m *MockGateway) FindUser(username string) *User {
+	for _, user := range m.users {
+		if user.Username == username {
+			return user
+		}
+	}
+	return nil
+}

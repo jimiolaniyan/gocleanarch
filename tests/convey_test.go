@@ -23,7 +23,7 @@ func TestClearCodecastsSpec(t *testing.T) {
 
 func TestAddUserSpec(t *testing.T) {
 	Convey("Given a new user U", t, func() {
-		user := "U"
+		user := "User"
 		Convey("When the U is added", func() {
 			status := codecastPresentation.AddUser(user)
 			Convey("Then U should be in the system", func() {

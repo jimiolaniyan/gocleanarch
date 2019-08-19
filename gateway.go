@@ -5,4 +5,5 @@ type Gateway interface {
 	Delete(codecast *Codecast)
 	SaveCodecast(codecast *Codecast)
 	SaveUser(user *User)
+	FindUser(username string) *User
 }
