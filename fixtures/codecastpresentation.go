@@ -47,3 +47,7 @@ func (c *codecastPresentation) CountOfCodecastsPresented() int {
 	presentations := c.useCase.PresentCodecasts(c.gateKeeper.LoggedInUser())
 	return len(presentations)
 }
+
+func (c *codecastPresentation) CreateLicenceForViewing(user string, codecast string) bool {
+	return false
+}

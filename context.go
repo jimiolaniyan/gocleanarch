@@ -1,7 +1,7 @@
 package gocleanarch
 
 /**
- Context is an application to ensure that certain objects
+ Context is an application context to ensure that certain objects
  are static during the lifetime of the application
  */
 

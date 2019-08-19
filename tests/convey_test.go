@@ -29,13 +29,44 @@ func TestPresentNoCodecastsSpec(t *testing.T) {
 			So(currentUser, ShouldEqual, user)
 		})
 
-
 		Convey("And there will be no codecasts presented", func() {
 			count := codecastPresentation.CountOfCodecastsPresented()
 			So(count, ShouldEqual, 0)
 		})
 	})
 
+}
+
+func TestPresentCodecastSpec(t *testing.T) {
+	user := "U"
+	codecast := "A"
+	Convey("Given codecasts", t, func() {
+		createCodeCasts()
+	})
+
+	Convey("And a user U", t, func() {
+		status := codecastPresentation.AddUser(user)
+		So(status, ShouldEqual, true)
+	})
+
+	Convey("And with license for U able to view A", t, func() {
+		status := codecastPresentation.CreateLicenceForViewing(user, codecast)
+		So(status, ShouldEqual, true)
+
+		Convey("Then the following codecasts will be presented for U", func() {
+			currentUser := codecastPresentation.PresentationUser()
+			So(currentUser, ShouldEqual, user)
+
+			presentedCodecasts := fixtures.Query()
+			expected := []fixtures.QueryResponse{
+				{Title: "C", Picture: "C", Description: "C", Viewable: false},
+				{Title: "A", Picture: "A", Description: "A", Viewable: true},
+				{Title: "B", Picture: "B", Description: "B", Viewable: true},
+			}
+
+			So(presentedCodecasts, ShouldEqual, expected)
+		})
+	})
 }
 
 func createCodeCasts() {
