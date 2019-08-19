@@ -8,42 +8,34 @@ import (
 
 var codecastPresentation = fixtures.NewCodecastPresentation()
 
-func TestClearCodecastsSpec(t *testing.T) {
+func TestPresentNoCodecastsSpec(t *testing.T) {
+	user := "U"
 	Convey("Given no codecasts", t, func() {
-		createCodeCasts()
-		Convey("When ClearCodecasts called", func() {
-			res := codecastPresentation.ClearCodecasts()
+		res := codecastPresentation.ClearCodecasts()
+		So(res, ShouldEqual, true)
+	})
 
-			Convey("It should be cleared", func() {
-				So(res, ShouldEqual, true)
-			})
+	Convey("And a user U", t, func() {
+		status := codecastPresentation.AddUser(user)
+		So(status, ShouldEqual, true)
+	})
+
+	Convey("With U logged in", t, func() {
+		out := codecastPresentation.LoginUser(user)
+		So(out, ShouldEqual, true)
+
+		Convey("Then presentation user will be U", func() {
+			currentUser := codecastPresentation.PresentationUser()
+			So(currentUser, ShouldEqual, user)
+		})
+
+
+		Convey("And there will be no codecasts presented", func() {
+			count := codecastPresentation.CountOfCodecastsPresented()
+			So(count, ShouldEqual, 0)
 		})
 	})
-}
 
-func TestAddUserSpec(t *testing.T) {
-	Convey("Given a new user U", t, func() {
-		user := "User"
-		Convey("When the U is added", func() {
-			status := codecastPresentation.AddUser(user)
-			Convey("Then U should be in the system", func() {
-				So(status, ShouldEqual, true)
-			})
-		})
-	})
-}
-
-func TestLoginUserSpec(t *testing.T) {
-	Convey("Given a user U", t, func() {
-		user := "U"
-		codecastPresentation.AddUser(user)
-		Convey("When the U logs in", func() {
-			res := codecastPresentation.LoginUser(user)
-			Convey("Then U should have a valid session", func() {
-				So(res, ShouldEqual, true)
-			})
-		})
-	})
 }
 
 func createCodeCasts() {

@@ -1,12 +1,11 @@
 package fixtures
 
 import (
-	"fmt"
 	. "github.com/jimiolaniyan/gocleanarch"
 )
 
 type codecastPresentation struct {
-	GateKeeper GateKeeper
+	gateKeeper GateKeeper
 }
 
 func NewCodecastPresentation() *codecastPresentation {
@@ -14,7 +13,7 @@ func NewCodecastPresentation() *codecastPresentation {
 	return &codecastPresentation{}
 }
 
-func (c codecastPresentation) ClearCodecasts() bool {
+func (c *codecastPresentation) ClearCodecasts() bool {
 	var codecasts = AGateway.FindAllCodecasts()
 
 	// TODO not a perfect solution
@@ -24,18 +23,25 @@ func (c codecastPresentation) ClearCodecasts() bool {
 	return len(AGateway.FindAllCodecasts()) == 0
 }
 
-func (c codecastPresentation) LoginUser(username string) bool {
+func (c *codecastPresentation) LoginUser(username string) bool {
 	user := AGateway.FindUser(username)
-	fmt.Println(user)
 	if user != nil {
-		c.GateKeeper.SetLoggedInUser(user)
+		c.gateKeeper.SetLoggedInUser(user)
 		return true
 	} else {
 		return false
 	}
 }
 
-func (c codecastPresentation) AddUser(username string) bool {
+func (c *codecastPresentation) AddUser(username string) bool {
 	AGateway.SaveUser(&User{Username:username})
 	return true
+}
+
+func (c *codecastPresentation) PresentationUser() string {
+	return c.gateKeeper.LoggedInUser().Username
+}
+
+func (c *codecastPresentation) CountOfCodecastsPresented() int {
+	return -1
 }
