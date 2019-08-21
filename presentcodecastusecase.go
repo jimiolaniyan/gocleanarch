@@ -8,3 +8,8 @@ type PresentCodecastUseCase struct {
 func (codecastUseCase *PresentCodecastUseCase) PresentCodecasts(user *User) []*PresentableCodecast {
 	return []*PresentableCodecast{}
 }
+
+func (codecastUseCase *PresentCodecastUseCase) IsLicensedToViewCodecast(user *User, codecast *Codecast) bool {
+	licenses := AGateway.FindLicensesForUserAndCodecast(user, codecast)
+	return len(licenses) > 0
+}

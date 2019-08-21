@@ -1,17 +1,16 @@
 package gocleanarch
 
+import "github.com/segmentio/ksuid"
+
 // MockGateway is a mock implementation of the Gateway
 type MockGateway struct {
 	codecasts []*Codecast
 	users []*User
+	licenses []*License
 }
 
 func NewMockGateway() *MockGateway{
 	 return &MockGateway{codecasts: []*Codecast{}}
-}
-
-func (m *MockGateway) SaveCodecast(codecast *Codecast) {
-	m.codecasts = append(m.codecasts, codecast)
 }
 
 func (m *MockGateway) FindAllCodecasts() []*Codecast {
@@ -27,7 +26,22 @@ func (m *MockGateway) Delete(codecast *Codecast) {
 }
 
 func (m *MockGateway) SaveUser(user *User) {
+	establishId(user)
 	m.users = append(m.users, user)
+}
+
+func establishId(u *User) {
+	if u.GetId() == "" {
+		u.SetId(ksuid.New().String())
+	}
+}
+
+func (m *MockGateway) SaveLicense(license *License) {
+	m.licenses = append(m.licenses, license)
+}
+
+func (m *MockGateway) SaveCodecast(codecast *Codecast) {
+	m.codecasts = append(m.codecasts, codecast)
 }
 
 func (m *MockGateway) FindUser(username string) *User {
@@ -37,4 +51,23 @@ func (m *MockGateway) FindUser(username string) *User {
 		}
 	}
 	return nil
+}
+
+func (m *MockGateway) FindCodecastByTitle(codecastTitle string) *Codecast {
+	for _, codecast := range m.codecasts {
+		if codecast.Title == codecastTitle {
+			return codecast
+		}
+	}
+	return nil
+}
+
+func (m *MockGateway) FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License {
+	var results []*License
+	for _, license := range m.licenses {
+		if license.User.IsSame(user) && license.Codecast.isSame(codecast) {
+			results = append(results, license)
+		}
+	}
+	return results
 }

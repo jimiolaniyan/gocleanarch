@@ -5,3 +5,7 @@ type Codecast struct {
 	Title           string
 	PublicationDate string
 }
+
+func (c *Codecast) isSame(codecast *Codecast) bool {
+	return true
+}

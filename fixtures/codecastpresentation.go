@@ -1,6 +1,7 @@
 package fixtures
 
 import (
+	"fmt"
 	. "github.com/jimiolaniyan/gocleanarch"
 )
 
@@ -48,6 +49,11 @@ func (c *codecastPresentation) CountOfCodecastsPresented() int {
 	return len(presentations)
 }
 
-func (c *codecastPresentation) CreateLicenceForViewing(user string, codecast string) bool {
-	return false
+func (c *codecastPresentation) CreateLicenceForViewing(username string, codecastTitle string) bool {
+	user := AGateway.FindUser(username)
+	codecast := AGateway.FindCodecastByTitle(codecastTitle)
+	var license = &License{User:user, Codecast:codecast}
+	AGateway.SaveLicense(license)
+	fmt.Println(AGateway)
+	return c.useCase.IsLicensedToViewCodecast(user, codecast)
 }

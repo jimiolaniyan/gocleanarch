@@ -37,7 +37,7 @@ func TestPresentNoCodecastsSpec(t *testing.T) {
 
 }
 
-func TestPresentCodecastSpec(t *testing.T) {
+func TestPresentCodecastsSpec(t *testing.T) {
 	user := "U"
 	codecast := "A"
 	Convey("Given codecasts", t, func() {
