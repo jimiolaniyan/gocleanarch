@@ -35,12 +35,12 @@ func (c *codecastPresentation) LoginUser(username string) bool {
 }
 
 func (c *codecastPresentation) AddUser(username string) bool {
-	AGateway.SaveUser(&User{Username: username})
+	AGateway.SaveUser(NewUser(username))
 	return true
 }
 
 func (c *codecastPresentation) PresentationUser() string {
-	return c.gateKeeper.LoggedInUser().Username
+	return c.gateKeeper.LoggedInUser().Username()
 }
 
 func (c *codecastPresentation) CountOfCodecastsPresented() int {
@@ -51,7 +51,7 @@ func (c *codecastPresentation) CountOfCodecastsPresented() int {
 func (c *codecastPresentation) CreateLicenceForViewing(username string, codecastTitle string) bool {
 	user := AGateway.FindUser(username)
 	codecast := AGateway.FindCodecastByTitle(codecastTitle)
-	var license = &License{User: user, Codecast: codecast}
+	var license = NewLicense(user, codecast)
 	AGateway.SaveLicense(license)
 	return c.useCase.IsLicensedToViewCodecast(user, codecast)
 }

@@ -5,11 +5,13 @@ import (
 )
 
 type GivenCodecast struct {
-	Title string
+	Title           string
 	PublicationDate string
 }
 
 func (gc *GivenCodecast) Execute() {
-	codecast := &Codecast{Title:gc.Title, PublicationDate:gc.PublicationDate}
+	codecast := &Codecast{}
+	codecast.SetTile(gc.Title)
+	codecast.SetPublicationDate(gc.PublicationDate)
 	AGateway.SaveCodecast(codecast)
 }

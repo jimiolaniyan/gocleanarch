@@ -21,7 +21,7 @@ func (m *MockGateway) FindAllCodecasts() []*Codecast {
 
 func (m *MockGateway) Delete(codecast *Codecast) {
 	for i, cc := range m.codecasts {
-		if cc.Title == codecast.Title {
+		if cc.title == codecast.title {
 			m.codecasts = append(m.codecasts[:i], m.codecasts[i+1:]...)
 		}
 	}
@@ -34,7 +34,7 @@ func (m *MockGateway) SaveUser(user *User) *User {
 }
 
 func establishId(e *Entity) {
-	if e.GetId() == "" {
+	if e.Id() == "" {
 		e.SetId(ksuid.New().String())
 	}
 }
@@ -51,7 +51,7 @@ func (m *MockGateway) SaveCodecast(codecast *Codecast) *Codecast {
 
 func (m *MockGateway) FindUser(username string) *User {
 	for _, user := range m.users {
-		if user.Username == username {
+		if user.username == username {
 			return user
 		}
 	}
@@ -60,7 +60,7 @@ func (m *MockGateway) FindUser(username string) *User {
 
 func (m *MockGateway) FindCodecastByTitle(codecastTitle string) *Codecast {
 	for _, codecast := range m.codecasts {
-		if codecast.Title == codecastTitle {
+		if codecast.title == codecastTitle {
 			return codecast
 		}
 	}
@@ -70,7 +70,7 @@ func (m *MockGateway) FindCodecastByTitle(codecastTitle string) *Codecast {
 func (m *MockGateway) FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License {
 	var results []*License
 	for _, license := range m.licenses {
-		if license.User.IsSame(&user.Entity) && license.Codecast.IsSame(&codecast.Entity) {
+		if license.User().IsSame(&user.Entity) && license.Codecast().IsSame(&codecast.Entity) {
 			results = append(results, license)
 		}
 	}

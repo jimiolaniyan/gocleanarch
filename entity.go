@@ -12,6 +12,6 @@ func (e *Entity) SetId(id string) {
 	e.id = id
 }
 
-func (e *Entity) GetId() string {
+func (e *Entity) Id() string {
 	return e.id
 }

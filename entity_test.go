@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
-type UserTestSuite struct {
+type EntitySuite struct {
 	suite.Suite
 }
 
-func (suite *UserTestSuite) TestTwoDifferentEntitiesAreNotTheSame() {
+func (suite *EntitySuite) TestTwoDifferentEntitiesAreNotTheSame() {
 	e1 := &Entity{}
 	e2 := &Entity{}
 
@@ -20,14 +20,14 @@ func (suite *UserTestSuite) TestTwoDifferentEntitiesAreNotTheSame() {
 	assert.False(suite.T(), e1.IsSame(e2))
 }
 
-func (suite *UserTestSuite) TestOneEntityIsTheSameAsItself() {
+func (suite *EntitySuite) TestOneEntityIsTheSameAsItself() {
 	e1 := &Entity{}
 	e1.SetId("e1Id")
 
 	assert.True(suite.T(), e1.IsSame(e1))
 }
 
-func (suite *UserTestSuite) TestEntitiesWithTheSameIdAreTheSame() {
+func (suite *EntitySuite) TestEntitiesWithTheSameIdAreTheSame() {
 	e1 := &Entity{}
 	e2 := &Entity{}
 
@@ -37,13 +37,13 @@ func (suite *UserTestSuite) TestEntitiesWithTheSameIdAreTheSame() {
 	assert.True(suite.T(), e1.IsSame(e2))
 }
 
-func (suite *UserTestSuite) TestEntitiesWithNullIdsAreNeverTheSame() {
+func (suite *EntitySuite) TestEntitiesWithNullIdsAreNeverTheSame() {
 	e1 := &Entity{}
 	e2 := &Entity{}
 
 	assert.False(suite.T(), e1.IsSame(e2))
 }
 
-func TestUserTestSuite(t *testing.T) {
-	suite.Run(t, new(UserTestSuite))
+func TestEntitySuite(t *testing.T) {
+	suite.Run(t, new(EntitySuite))
 }

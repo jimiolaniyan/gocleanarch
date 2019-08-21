@@ -5,8 +5,19 @@ package gocleanarch
 type PresentCodecastUseCase struct {
 }
 
-func (codecastUseCase *PresentCodecastUseCase) PresentCodecasts(user *User) []*PresentableCodecast {
-	return []*PresentableCodecast{}
+func (codecastUseCase *PresentCodecastUseCase) PresentCodecasts(loggedInUser *User) []*PresentableCodecast {
+	//allCodecasts := AGateway.FindAllCodecasts()
+	var presentableCodecasts []*PresentableCodecast
+
+	for _, codecast := range AGateway.FindAllCodecasts() {
+		pc := &PresentableCodecast{}
+		pc.Title = codecast.Title()
+		pc.PublicationDate = codecast.PublicationDate()
+		pc.IsViewable = codecastUseCase.IsLicensedToViewCodecast(loggedInUser, codecast)
+		presentableCodecasts = append(presentableCodecasts, pc)
+	}
+
+	return presentableCodecasts
 }
 
 func (codecastUseCase *PresentCodecastUseCase) IsLicensedToViewCodecast(user *User, codecast *Codecast) bool {
