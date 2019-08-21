@@ -1,6 +1,8 @@
 package gocleanarch
 
-import "github.com/segmentio/ksuid"
+import (
+	"github.com/segmentio/ksuid"
+)
 
 // MockGateway is a mock implementation of the Gateway
 type MockGateway struct {
@@ -25,14 +27,15 @@ func (m *MockGateway) Delete(codecast *Codecast) {
 	}
 }
 
-func (m *MockGateway) SaveUser(user *User) {
-	establishId(user)
+func (m *MockGateway) SaveUser(user *User) *User {
+	establishId(&user.Entity)
 	m.users = append(m.users, user)
+	return user
 }
 
-func establishId(u *User) {
-	if u.GetId() == "" {
-		u.SetId(ksuid.New().String())
+func establishId(e *Entity) {
+	if e.GetId() == "" {
+		e.SetId(ksuid.New().String())
 	}
 }
 
@@ -40,8 +43,10 @@ func (m *MockGateway) SaveLicense(license *License) {
 	m.licenses = append(m.licenses, license)
 }
 
-func (m *MockGateway) SaveCodecast(codecast *Codecast) {
+func (m *MockGateway) SaveCodecast(codecast *Codecast) *Codecast {
+	establishId(&codecast.Entity)
 	m.codecasts = append(m.codecasts, codecast)
+	return codecast
 }
 
 func (m *MockGateway) FindUser(username string) *User {
@@ -65,7 +70,7 @@ func (m *MockGateway) FindCodecastByTitle(codecastTitle string) *Codecast {
 func (m *MockGateway) FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License {
 	var results []*License
 	for _, license := range m.licenses {
-		if license.User.IsSame(user) && license.Codecast.isSame(codecast) {
+		if license.User.IsSame(&user.Entity) && license.Codecast.IsSame(&codecast.Entity) {
 			results = append(results, license)
 		}
 	}

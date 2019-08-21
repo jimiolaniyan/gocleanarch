@@ -5,8 +5,8 @@ package gocleanarch
 type Gateway interface {
 	FindAllCodecasts() []*Codecast
 	Delete(codecast *Codecast)
-	SaveCodecast(codecast *Codecast)
-	SaveUser(user *User)
+	SaveCodecast(codecast *Codecast) *Codecast
+	SaveUser(user *User) *User
 	FindUser(username string) *User
 	FindCodecastByTitle(codecastTitle string) *Codecast
 	SaveLicense(license *License)

@@ -8,15 +8,15 @@ import (
 
 type PresentCodecastUsecaseTestSuite struct {
 	suite.Suite
-	user *User
+	user     *User
 	codecast *Codecast
-	useCase *PresentCodecastUseCase
+	useCase  *PresentCodecastUseCase
 }
 
 func (suite *PresentCodecastUsecaseTestSuite) SetupTest() {
 	AGateway = NewMockGateway()
-	suite.user = &User{Username:"Shakespeare"}
-	suite.codecast = &Codecast{}
+	suite.user = AGateway.SaveUser(&User{Username: "Shakespeare"})
+	suite.codecast = AGateway.SaveCodecast(&Codecast{})
 	suite.useCase = new(PresentCodecastUseCase)
 }
 
@@ -27,7 +27,7 @@ func (suite *PresentCodecastUsecaseTestSuite) TestUserWithoutViewLicense_CannotV
 	assert.False(suite.T(), licensedToView, "User should not be licenced to view as there is no license")
 }
 
-func (suite *PresentCodecastUsecaseTestSuite) TestUserWithViewLicense_CanViewCodecast(){
+func (suite *PresentCodecastUsecaseTestSuite) TestUserWithViewLicense_CanViewCodecast() {
 
 	viewLicence := &License{User: suite.user, Codecast: suite.codecast}
 
@@ -37,15 +37,14 @@ func (suite *PresentCodecastUsecaseTestSuite) TestUserWithViewLicense_CanViewCod
 	assert.True(suite.T(), licensedToView)
 }
 
-func (suite *PresentCodecastUsecaseTestSuite) TestUserWithoutViewLicense_CannotViewOtherUsersCodecast(){
-	otherUser := &User{Username:"Atwood"}
-	AGateway.SaveUser(otherUser)
+func (suite *PresentCodecastUsecaseTestSuite) TestUserWithoutViewLicense_CannotViewOtherUsersCodecast() {
+	otherUser := AGateway.SaveUser(&User{Username: "Atwood"})
 
 	viewLicence := &License{User: suite.user, Codecast: suite.codecast}
-
 	AGateway.SaveLicense(viewLicence)
 
 	licensedToView := suite.useCase.IsLicensedToViewCodecast(otherUser, suite.codecast)
+
 	assert.False(suite.T(), licensedToView)
 }
 
