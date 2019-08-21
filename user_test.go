@@ -17,6 +17,8 @@ func TestTwoDifferentUsersAreNotTheSame(t *testing.T) {
 
 func TestOneUserIsTheSameAsItself(t *testing.T) {
 	u1 := &User{Username:"u1"}
+	u1.SetId("u1Id")
+
 	assert.True(t, u1.IsSame(u1))
 }
 
@@ -30,3 +32,9 @@ func TestUsersWithTheSameIdAreTheSame(t *testing.T) {
 	assert.True(t, u1.IsSame(u2))
 }
 
+func TestUsersWithNullIdsAreNeverTheSame(t *testing.T) {
+	u1 := &User{Username:"u1"}
+	u2 := &User{Username:"u2"}
+
+	assert.False(t, u1.IsSame(u2))
+}

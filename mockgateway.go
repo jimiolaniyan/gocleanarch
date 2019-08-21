@@ -5,12 +5,12 @@ import "github.com/segmentio/ksuid"
 // MockGateway is a mock implementation of the Gateway
 type MockGateway struct {
 	codecasts []*Codecast
-	users []*User
-	licenses []*License
+	users     []*User
+	licenses  []*License
 }
 
-func NewMockGateway() *MockGateway{
-	 return &MockGateway{codecasts: []*Codecast{}}
+func NewMockGateway() *MockGateway {
+	return &MockGateway{codecasts: []*Codecast{}}
 }
 
 func (m *MockGateway) FindAllCodecasts() []*Codecast {
