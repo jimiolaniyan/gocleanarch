@@ -1,36 +1,35 @@
 package tests
 
 import (
+	"fmt"
 	"github.com/jimiolaniyan/gocleanarch/fixtures"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 )
 
-var codecastPresentation = fixtures.NewCodecastPresentation()
-
 func TestPresentNoCodecastsSpec(t *testing.T) {
 	user := "U"
 	Convey("Given no codecasts", t, func() {
-		res := codecastPresentation.ClearCodecasts()
+		res := fixtures.CodecastPresentation.ClearCodecasts()
 		So(res, ShouldEqual, true)
 	})
 
 	Convey("And a user U", t, func() {
-		status := codecastPresentation.AddUser(user)
+		status := fixtures.CodecastPresentation.AddUser(user)
 		So(status, ShouldEqual, true)
 	})
 
 	Convey("With U logged in", t, func() {
-		out := codecastPresentation.LoginUser(user)
+		out := fixtures.CodecastPresentation.LoginUser(user)
 		So(out, ShouldEqual, true)
 
 		Convey("Then presentation user will be U", func() {
-			currentUser := codecastPresentation.PresentationUser()
+			currentUser := fixtures.CodecastPresentation.PresentationUser()
 			So(currentUser, ShouldEqual, user)
 		})
 
 		Convey("And there will be no codecasts presented", func() {
-			count := codecastPresentation.CountOfCodecastsPresented()
+			count := fixtures.CodecastPresentation.CountOfCodecastsPresented()
 			So(count, ShouldEqual, 0)
 		})
 	})
@@ -45,23 +44,24 @@ func TestPresentCodecastsSpec(t *testing.T) {
 	})
 
 	Convey("And a user U", t, func() {
-		status := codecastPresentation.AddUser(user)
+		status := fixtures.CodecastPresentation.AddUser(user)
 		So(status, ShouldEqual, true)
 	})
 
 	Convey("And with license for U able to view A", t, func() {
-		status := codecastPresentation.CreateLicenceForViewing(user, codecast)
+		status := fixtures.CodecastPresentation.CreateLicenceForViewing(user, codecast)
 		So(status, ShouldEqual, true)
 
 		Convey("Then the following codecasts will be presented for U", func() {
-			currentUser := codecastPresentation.PresentationUser()
+			currentUser := fixtures.CodecastPresentation.PresentationUser()
 			So(currentUser, ShouldEqual, user)
 
 			presentedCodecasts := fixtures.Query()
+			fmt.Println(presentedCodecasts)
 			expected := []fixtures.QueryResponse{
 				{Title: "C", Picture: "C", Description: "C", Viewable: false},
 				{Title: "A", Picture: "A", Description: "A", Viewable: true},
-				{Title: "B", Picture: "B", Description: "B", Viewable: true},
+				{Title: "B", Picture: "B", Description: "B", Viewable: false},
 			}
 
 			So(presentedCodecasts, ShouldEqual, expected)

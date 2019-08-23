@@ -4,14 +4,16 @@ import (
 	. "github.com/jimiolaniyan/gocleanarch"
 )
 
+var CodecastPresentation = NewCodecastPresentation()
+
 type codecastPresentation struct {
-	gateKeeper GateKeeper
+	gateKeeper *GateKeeper
 	useCase    PresentCodecastUseCase
 }
 
 func NewCodecastPresentation() *codecastPresentation {
 	AGateway = NewMockGateway()
-	return &codecastPresentation{}
+	return &codecastPresentation{gateKeeper: new(GateKeeper)}
 }
 
 func (c *codecastPresentation) ClearCodecasts() bool {

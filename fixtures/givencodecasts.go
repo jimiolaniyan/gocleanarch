@@ -2,6 +2,7 @@ package fixtures
 
 import (
 	. "github.com/jimiolaniyan/gocleanarch"
+	"time"
 )
 
 type GivenCodecast struct {
@@ -12,6 +13,8 @@ type GivenCodecast struct {
 func (gc *GivenCodecast) Execute() {
 	codecast := &Codecast{}
 	codecast.SetTile(gc.Title)
-	codecast.SetPublicationDate(gc.PublicationDate)
+
+	t, _ := time.Parse("01/02/2006", gc.PublicationDate)
+	codecast.SetPublicationDate(t)
 	AGateway.SaveCodecast(codecast)
 }
