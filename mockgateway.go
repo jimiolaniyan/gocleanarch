@@ -9,7 +9,7 @@ import (
 type MockGateway struct {
 	codecasts []*Codecast
 	users     []*User
-	licenses  []*License
+	licenses  []Licenser
 }
 
 func NewMockGateway() *MockGateway {
@@ -43,7 +43,7 @@ func establishId(e *Entity) {
 	}
 }
 
-func (m *MockGateway) SaveLicense(license *License) {
+func (m *MockGateway) SaveLicense(license Licenser) {
 	m.licenses = append(m.licenses, license)
 }
 
@@ -71,8 +71,8 @@ func (m *MockGateway) FindCodecastByTitle(codecastTitle string) *Codecast {
 	return nil
 }
 
-func (m *MockGateway) FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License {
-	var results []*License
+func (m *MockGateway) FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []Licenser {
+	var results []Licenser
 	for _, license := range m.licenses {
 		if license.User().IsSame(&user.Entity) && license.Codecast().IsSame(&codecast.Entity) {
 			results = append(results, license)

@@ -77,6 +77,13 @@ func (suite *PresentCodecastUsecaseSuite) TestPresentedCodecastIsViewableIfLicen
 	assert.True(suite.T(), presentableCodeCasts[0].IsViewable)
 }
 
+func (suite *PresentCodecastUsecaseSuite) TestPresentedCodecastIsDownloadableIfDownloadLicenseExists() {
+	license := NewDownloadLicense(suite.user, suite.codecast)
+	AGateway.SaveLicense(license)
+	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
+	assert.True(suite.T(), presentableCodeCasts[0].IsDownLoadable)
+}
+
 // In order for 'go test' to run this suite, we need to create
 // a normal test function and pass our suite to suite.Run
 func TestPresentCodecastUsecaseSuite(t *testing.T) {

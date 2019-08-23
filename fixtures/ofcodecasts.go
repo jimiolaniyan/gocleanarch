@@ -7,7 +7,7 @@ type QueryResponse struct {
 	Picture      string
 	Description  string
 	Viewable     bool
-	downloadable bool
+	Downloadable bool
 }
 
 func Query() []QueryResponse {
@@ -22,7 +22,7 @@ func Query() []QueryResponse {
 			Picture:      pc.Title,
 			Description:  pc.Title,
 			Viewable:     pc.IsViewable,
-			downloadable: false,
+			Downloadable: false,
 		})
 	}
 

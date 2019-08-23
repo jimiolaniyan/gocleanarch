@@ -7,4 +7,5 @@ type PresentableCodecast struct {
 	IsViewable      bool
 	Title           string
 	PublicationDate string
+	IsDownLoadable  bool
 }

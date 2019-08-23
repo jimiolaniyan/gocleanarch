@@ -36,6 +36,10 @@ func (c *codecastPresentation) LoginUser(username string) bool {
 	}
 }
 
+func (c *codecastPresentation) LogOutUser() {
+	c.gateKeeper.SetLoggedInUser(nil)
+}
+
 func (c *codecastPresentation) AddUser(username string) bool {
 	AGateway.SaveUser(NewUser(username))
 	return true
@@ -56,4 +60,12 @@ func (c *codecastPresentation) CreateLicenceForViewing(username string, codecast
 	var license = NewLicense(user, codecast)
 	AGateway.SaveLicense(license)
 	return c.useCase.IsLicensedToViewCodecast(user, codecast)
+}
+
+func (c *codecastPresentation) CreateLicenceForDownloading(username string, codecastTitle string) bool {
+	user := AGateway.FindUser(username)
+	codecast := AGateway.FindCodecastByTitle(codecastTitle)
+	var license = NewLicense(user, codecast)
+	AGateway.SaveLicense(license)
+	return c.useCase.IsLicensedToDownloadCodecast(user, codecast)
 }
