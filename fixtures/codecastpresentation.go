@@ -57,15 +57,15 @@ func (c *codecastPresentation) CountOfCodecastsPresented() int {
 func (c *codecastPresentation) CreateLicenceForViewing(username string, codecastTitle string) bool {
 	user := AGateway.FindUser(username)
 	codecast := AGateway.FindCodecastByTitle(codecastTitle)
-	var license = NewLicense(user, codecast)
+	var license = NewLicense(Viewing, user, codecast)
 	AGateway.SaveLicense(license)
-	return c.useCase.IsLicensedToViewCodecast(user, codecast)
+	return c.useCase.IsLicensedFor(Viewing, user, codecast)
 }
 
 func (c *codecastPresentation) CreateLicenceForDownloading(username string, codecastTitle string) bool {
 	user := AGateway.FindUser(username)
 	codecast := AGateway.FindCodecastByTitle(codecastTitle)
-	var license = NewLicense(user, codecast)
+	var license = NewLicense(Downloading, user, codecast)
 	AGateway.SaveLicense(license)
-	return c.useCase.IsLicensedToDownloadCodecast(user, codecast)
+	return c.useCase.IsLicensedFor(Downloading, user, codecast)
 }

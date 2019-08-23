@@ -109,7 +109,7 @@ func TestPresentDownloadableCodecastsSpec(t *testing.T) {
 			presentedCodecasts := fixtures.Query()
 			expected := []fixtures.QueryResponse{
 				{Title: "C", Picture: "C", Description: "C", Viewable: false},
-				{Title: "A", Picture: "A", Description: "A", Viewable: true, Downloadable: true},
+				{Title: "A", Picture: "A", Description: "A", Viewable: false, Downloadable: true},
 				{Title: "B", Picture: "B", Description: "B", Viewable: false},
 			}
 			So(presentedCodecasts, ShouldResemble, expected)

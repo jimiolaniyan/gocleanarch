@@ -2,17 +2,20 @@ package gocleanarch
 
 type License struct {
 	Entity
-	user     *User
-	codecast *Codecast
+	user        *User
+	codecast    *Codecast
+	licenseType LicenseType
 }
 
-type Licenser interface {
-	User() *User
-	Codecast() *Codecast
-}
+type LicenseType int
 
-func NewLicense(user *User, codecast *Codecast) *License {
-	return &License{user: user, codecast: codecast}
+const (
+	Viewing LicenseType = 1 + iota
+	Downloading
+)
+
+func NewLicense(lType LicenseType, user *User, codecast *Codecast) *License {
+	return &License{licenseType: lType, user: user, codecast: codecast}
 }
 
 func (l *License) User() *User {
@@ -23,17 +26,6 @@ func (l *License) Codecast() *Codecast {
 	return l.codecast
 }
 
-type DownloadLicense struct {
-	License
-}
-
-type ViewableLicense struct {
-	License
-}
-
-func NewViewableLicense(user *User, codecast *Codecast) *ViewableLicense {
-	return &ViewableLicense{License{user: user, codecast: codecast}}
-}
-func NewDownloadLicense(user *User, codecast *Codecast) *DownloadLicense {
-	return &DownloadLicense{License{user: user, codecast: codecast}}
+func (l *License) LicenseType() LicenseType {
+	return l.licenseType
 }

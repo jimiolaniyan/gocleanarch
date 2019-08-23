@@ -22,27 +22,23 @@ func (suite *PresentCodecastUsecaseSuite) SetupTest() {
 }
 
 func (suite *PresentCodecastUsecaseSuite) TestUserWithoutViewLicense_CannotViewCodecast() {
-	licensedToView := suite.useCase.IsLicensedToViewCodecast(suite.user, suite.codecast)
+	licensedToView := suite.useCase.IsLicensedFor(Viewing, suite.user, suite.codecast)
 	assert.False(suite.T(), licensedToView, "User should not be licenced to view as there is no license")
 }
 
 func (suite *PresentCodecastUsecaseSuite) TestUserWithViewLicense_CanViewCodecast() {
-
-	viewLicence := NewViewableLicense(suite.user, suite.codecast)
-
+	viewLicence := NewLicense(Viewing, suite.user, suite.codecast)
 	AGateway.SaveLicense(viewLicence)
+	licensedToView := suite.useCase.IsLicensedFor(Viewing, suite.user, suite.codecast)
 
-	licensedToView := suite.useCase.IsLicensedToViewCodecast(suite.user, suite.codecast)
 	assert.True(suite.T(), licensedToView)
 }
 
 func (suite *PresentCodecastUsecaseSuite) TestUserWithoutViewLicense_CannotViewOtherUsersCodecast() {
 	otherUser := AGateway.SaveUser(NewUser("Atwood"))
-
-	viewLicence := NewLicense(suite.user, suite.codecast)
+	viewLicence := NewLicense(Viewing, suite.user, suite.codecast)
 	AGateway.SaveLicense(viewLicence)
-
-	licensedToView := suite.useCase.IsLicensedToViewCodecast(otherUser, suite.codecast)
+	licensedToView := suite.useCase.IsLicensedFor(Viewing, otherUser, suite.codecast)
 
 	assert.False(suite.T(), licensedToView)
 }
@@ -59,9 +55,9 @@ func (suite *PresentCodecastUsecaseSuite) TestPresentOneCodecast() {
 	date := time.Date(2011, 5, 22, 00, 00, 00, 000, time.UTC)
 	suite.codecast.SetPublicationDate(date)
 	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
-	assert.True(suite.T(), len(presentableCodeCasts) == 1)
-
 	pc := presentableCodeCasts[0]
+
+	assert.True(suite.T(), len(presentableCodeCasts) == 1)
 	assert.True(suite.T(), "Some Title" == pc.Title)
 	assert.True(suite.T(), date.Format("1/2/2006") == pc.PublicationDate)
 }
@@ -72,13 +68,13 @@ func (suite *PresentCodecastUsecaseSuite) TestPresentedCodecastIsNotViewableIfNo
 }
 
 func (suite *PresentCodecastUsecaseSuite) TestPresentedCodecastIsViewableIfLicenseExists() {
-	AGateway.SaveLicense(NewViewableLicense(suite.user, suite.codecast))
+	AGateway.SaveLicense(NewLicense(Viewing, suite.user, suite.codecast))
 	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
 	assert.True(suite.T(), presentableCodeCasts[0].IsViewable)
 }
 
 func (suite *PresentCodecastUsecaseSuite) TestPresentedCodecastIsDownloadableIfDownloadLicenseExists() {
-	license := NewDownloadLicense(suite.user, suite.codecast)
+	license := NewLicense(Downloading, suite.user, suite.codecast)
 	AGateway.SaveLicense(license)
 	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
 	presentableCodecast := presentableCodeCasts[0]

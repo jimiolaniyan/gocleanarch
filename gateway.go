@@ -9,6 +9,6 @@ type Gateway interface {
 	SaveUser(user *User) *User
 	FindUser(username string) *User
 	FindCodecastByTitle(codecastTitle string) *Codecast
-	SaveLicense(license Licenser)
-	FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []Licenser
+	SaveLicense(license *License)
+	FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License
 }

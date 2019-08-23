@@ -22,7 +22,7 @@ func Query() []QueryResponse {
 			Picture:      pc.Title,
 			Description:  pc.Title,
 			Viewable:     pc.IsViewable,
-			Downloadable: false,
+			Downloadable: pc.IsDownLoadable,
 		})
 	}
 
