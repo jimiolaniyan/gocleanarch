@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"fmt"
 	"github.com/jimiolaniyan/gocleanarch/fixtures"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
@@ -57,14 +56,12 @@ func TestPresentCodecastsSpec(t *testing.T) {
 			So(currentUser, ShouldEqual, user)
 
 			presentedCodecasts := fixtures.Query()
-			fmt.Println(presentedCodecasts)
 			expected := []fixtures.QueryResponse{
 				{Title: "C", Picture: "C", Description: "C", Viewable: false},
 				{Title: "A", Picture: "A", Description: "A", Viewable: true},
 				{Title: "B", Picture: "B", Description: "B", Viewable: false},
 			}
-
-			So(presentedCodecasts, ShouldEqual, expected)
+			So(presentedCodecasts, ShouldResemble, expected)
 		})
 	})
 }

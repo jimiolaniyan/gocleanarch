@@ -8,10 +8,10 @@ type PresentCodecastUseCase struct {
 func (codecastUseCase *PresentCodecastUseCase) PresentCodecasts(loggedInUser *User) []*PresentableCodecast {
 	var presentableCodecasts []*PresentableCodecast
 
-	for _, codecast := range AGateway.FindAllCodecasts() {
+	for _, codecast := range AGateway.FindAllCodecastsSortedChronologically() {
 		pc := &PresentableCodecast{}
 		pc.Title = codecast.Title()
-		pc.PublicationDate = codecast.PublicationDate().Format("01/02/2006")
+		pc.PublicationDate = codecast.PublicationDate().Format("1/2/2006")
 		pc.IsViewable = codecastUseCase.IsLicensedToViewCodecast(loggedInUser, codecast)
 		presentableCodecasts = append(presentableCodecasts, pc)
 	}

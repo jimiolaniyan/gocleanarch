@@ -3,7 +3,7 @@ package gocleanarch
 // Gateway is an interface that defines what persistence operations are available.
 // It belongs in the interface adapters layer.
 type Gateway interface {
-	FindAllCodecasts() []*Codecast
+	FindAllCodecastsSortedChronologically() []*Codecast
 	Delete(codecast *Codecast)
 	SaveCodecast(codecast *Codecast) *Codecast
 	SaveUser(user *User) *User

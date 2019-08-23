@@ -2,6 +2,7 @@ package gocleanarch
 
 import (
 	"github.com/segmentio/ksuid"
+	"sort"
 )
 
 // MockGateway is a mock implementation of the Gateway
@@ -15,7 +16,10 @@ func NewMockGateway() *MockGateway {
 	return &MockGateway{codecasts: []*Codecast{}}
 }
 
-func (m *MockGateway) FindAllCodecasts() []*Codecast {
+func (m *MockGateway) FindAllCodecastsSortedChronologically() []*Codecast {
+	sort.Slice(m.codecasts, func(i, j int) bool {
+		return m.codecasts[i].PublicationDate().Before(m.codecasts[j].PublicationDate())
+	})
 	return m.codecasts
 }
 

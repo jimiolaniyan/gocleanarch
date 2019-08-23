@@ -17,13 +17,13 @@ func NewCodecastPresentation() *codecastPresentation {
 }
 
 func (c *codecastPresentation) ClearCodecasts() bool {
-	var codecasts = AGateway.FindAllCodecasts()
+	var codecasts = AGateway.FindAllCodecastsSortedChronologically()
 
 	// TODO not a perfect solution
 	for i := len(codecasts) - 1; i >= 0; i-- {
 		AGateway.Delete(codecasts[i])
 	}
-	return len(AGateway.FindAllCodecasts()) == 0
+	return len(AGateway.FindAllCodecastsSortedChronologically()) == 0
 }
 
 func (c *codecastPresentation) LoginUser(username string) bool {

@@ -14,7 +14,8 @@ func (gc *GivenCodecast) Execute() {
 	codecast := &Codecast{}
 	codecast.SetTile(gc.Title)
 
-	t, _ := time.Parse("01/02/2006", gc.PublicationDate)
+	t, _ := time.Parse("1/2/2006", gc.PublicationDate)
+
 	codecast.SetPublicationDate(t)
 	AGateway.SaveCodecast(codecast)
 }

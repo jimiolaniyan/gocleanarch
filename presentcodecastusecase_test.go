@@ -56,14 +56,14 @@ func (suite *PresentCodecastUsecaseSuite) TestPresentingNoCodecasts() {
 
 func (suite *PresentCodecastUsecaseSuite) TestPresentOneCodecast() {
 	suite.codecast.SetTile("Some Title")
-	date := time.Date(2011, 05, 22, 00, 00, 00, 000, time.UTC)
+	date := time.Date(2011, 5, 22, 00, 00, 00, 000, time.UTC)
 	suite.codecast.SetPublicationDate(date)
 	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
 	assert.True(suite.T(), len(presentableCodeCasts) == 1)
 
 	pc := presentableCodeCasts[0]
 	assert.True(suite.T(), "Some Title" == pc.Title)
-	assert.True(suite.T(), date.Format("01/02/2006") == pc.PublicationDate)
+	assert.True(suite.T(), date.Format("1/2/2006") == pc.PublicationDate)
 }
 
 func (suite *PresentCodecastUsecaseSuite) TestPresentedCodecastIsNotViewableIfNoLicense() {
