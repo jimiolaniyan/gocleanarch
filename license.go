@@ -27,6 +27,13 @@ type DownloadLicense struct {
 	License
 }
 
+type ViewableLicense struct {
+	License
+}
+
+func NewViewableLicense(user *User, codecast *Codecast) *ViewableLicense {
+	return &ViewableLicense{License{user: user, codecast: codecast}}
+}
 func NewDownloadLicense(user *User, codecast *Codecast) *DownloadLicense {
 	return &DownloadLicense{License{user: user, codecast: codecast}}
 }

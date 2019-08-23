@@ -1,7 +1,6 @@
 package gocleanarch
 
 import (
-	"fmt"
 	"reflect"
 )
 
@@ -27,16 +26,18 @@ func (codecastUseCase *PresentCodecastUseCase) PresentCodecasts(loggedInUser *Us
 
 func (codecastUseCase *PresentCodecastUseCase) IsLicensedToViewCodecast(user *User, codecast *Codecast) bool {
 	licenses := AGateway.FindLicensesForUserAndCodecast(user, codecast)
-	return len(licenses) > 0
+	for _, l := range licenses {
+		if reflect.TypeOf(l) == reflect.TypeOf(&ViewableLicense{}) {
+			return true
+		}
+	}
+	return false
 }
 
 func (codecastUseCase *PresentCodecastUseCase) IsLicensedToDownloadCodecast(user *User, codecast *Codecast) bool {
 	licenses := AGateway.FindLicensesForUserAndCodecast(user, codecast)
 	for _, l := range licenses {
-		fmt.Println(reflect.TypeOf(l))
-		fmt.Println(reflect.TypeOf(&DownloadLicense{}))
 		if reflect.TypeOf(l) == reflect.TypeOf(&DownloadLicense{}) {
-			fmt.Println("Is downloadable")
 			return true
 		}
 	}

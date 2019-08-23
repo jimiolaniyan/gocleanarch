@@ -28,7 +28,7 @@ func (suite *PresentCodecastUsecaseSuite) TestUserWithoutViewLicense_CannotViewC
 
 func (suite *PresentCodecastUsecaseSuite) TestUserWithViewLicense_CanViewCodecast() {
 
-	viewLicence := NewLicense(suite.user, suite.codecast)
+	viewLicence := NewViewableLicense(suite.user, suite.codecast)
 
 	AGateway.SaveLicense(viewLicence)
 
@@ -72,7 +72,7 @@ func (suite *PresentCodecastUsecaseSuite) TestPresentedCodecastIsNotViewableIfNo
 }
 
 func (suite *PresentCodecastUsecaseSuite) TestPresentedCodecastIsViewableIfLicenseExists() {
-	AGateway.SaveLicense(NewLicense(suite.user, suite.codecast))
+	AGateway.SaveLicense(NewViewableLicense(suite.user, suite.codecast))
 	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
 	assert.True(suite.T(), presentableCodeCasts[0].IsViewable)
 }
@@ -81,7 +81,9 @@ func (suite *PresentCodecastUsecaseSuite) TestPresentedCodecastIsDownloadableIfD
 	license := NewDownloadLicense(suite.user, suite.codecast)
 	AGateway.SaveLicense(license)
 	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
-	assert.True(suite.T(), presentableCodeCasts[0].IsDownLoadable)
+	presentableCodecast := presentableCodeCasts[0]
+	assert.True(suite.T(), presentableCodecast.IsDownLoadable)
+	assert.False(suite.T(), presentableCodecast.IsViewable)
 }
 
 // In order for 'go test' to run this suite, we need to create
