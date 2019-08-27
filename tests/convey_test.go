@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"github.com/jimiolaniyan/gocleanarch/fixtures"
+	"github.com/jimiolaniyan/gocleanarch/tests/fixtures"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 )
