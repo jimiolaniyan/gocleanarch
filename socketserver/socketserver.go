@@ -33,15 +33,19 @@ func (ss *SocketServer) Service() SocketService {
 }
 
 func (ss *SocketServer) start() {
-	go func() {
-		conn, err := ss.listener.Accept()
+	go acceptConnections(ss)
+	ss.running = true
+}
+
+func acceptConnections(server *SocketServer) {
+	for server.running {
+		conn, err := server.listener.Accept()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		ss.service.serve(conn)
-	}()
-	ss.running = true
+		go server.service.serve(conn)
+	}
 }
 
 func (ss *SocketServer) Running() bool {
