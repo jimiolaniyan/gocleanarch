@@ -1,6 +1,7 @@
 package socketserver
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -11,28 +12,33 @@ import (
 
 type FakeSocketService struct {
 	connections int
-	Message     string
 }
 
 var done = make(chan bool)
 
 func (fss *FakeSocketService) serve(c net.Conn) {
 	defer c.Close()
-
-	fss.connections = fss.connections + 1
+	fss.connections++
 	done <- true
-	//buf := make([]byte, 1024)
-	//r := bufio.NewReader(c)
-	//
-	//n, err := r.Read(buf)
-	//fmt.Println(n)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//
-	//fss.Message = string(buf[:n])
-	//fmt.Println(fss.Message)
+}
 
+type ReadingSocketService struct {
+	Message string
+}
+
+func (rss *ReadingSocketService) serve(c net.Conn) {
+	defer c.Close()
+	buf := make([]byte, 1024)
+	r := bufio.NewReader(c)
+
+	n, err := r.Read(buf)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	rss.Message = string(buf[:n])
+	done <- true
 }
 
 type SocketServerSuite struct {
@@ -100,21 +106,23 @@ func (suite *SocketServerSuite) TestAcceptsMultipleIncomingConnections() {
 	assert.Equal(suite.T(), 2, suite.service.connections)
 }
 
-//func (suite *SocketServerSuite) TestCanSendAndReceiveData() {
-//	suite.server.start()
-//	conn, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
-//	if err != nil {
-//		fmt.Println(err)
-//	}
-//	_, err = conn.Write([]byte("hello"))
-//	if err != nil {
-//		fmt.Println(err)
-//	}
-//
-//	fmt.Println(suite.service.Message)
-//	suite.server.stop()
-//	assert.Equal(suite.T(), "hello", suite.service.Message)
-//}
+func (suite *SocketServerSuite) TestCanSendAndReceiveData() {
+	readingService := &ReadingSocketService{}
+	suite.server.service = readingService
+	suite.server.start()
+	conn, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
+	if err != nil {
+		fmt.Println(err)
+	}
+	_, err = conn.Write([]byte("hello"))
+	<-done
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	suite.server.stop()
+	assert.Equal(suite.T(), "hello", readingService.Message)
+}
 
 // In order for 'go test' to run this suite, we need to create
 // a normal test function and pass our suite to suite.Run
