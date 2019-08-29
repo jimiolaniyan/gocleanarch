@@ -161,10 +161,10 @@ func (suite *ReadingSocketServerTestSuite) TestCanSendAndReceiveData() {
 		fmt.Println(err)
 	}
 	_, err = conn.Write([]byte("hello"))
-	<-done
 	if err != nil {
 		fmt.Println(err)
 	}
+	<-done
 
 	suite.server.stop()
 	assert.Equal(suite.T(), "hello", suite.readingService.Message)
@@ -176,6 +176,20 @@ type EchoSocketService struct {
 }
 
 func (ess *EchoSocketService) doService(c net.Conn) {
+	defer c.Close()
+	buf := make([]byte, 1024)
+	r := bufio.NewReader(c)
+	n, err := r.Read(buf)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	message := string(buf[:n])
+
+	_, err = c.Write([]byte(message))
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func NewEchoSocketService() *EchoSocketService {
@@ -207,20 +221,26 @@ func (suite *EchoSocketServerTestSuite) TearDownTest() {
 	suite.server.stop()
 }
 
-func (suite *EchoSocketServerTestSuite) TestCanSendAndReceiveData() {
-	//suite.server.start()
-	//conn, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//_, err = conn.Write([]byte("hello"))
-	//<-done
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//
-	//suite.server.stop()
-	//assert.Equal(suite.T(), "hello", suite.readingService.Message)
+func (suite *EchoSocketServerTestSuite) TestCanEcho() {
+	suite.server.start()
+	conn, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
+	if err != nil {
+		fmt.Println(err)
+	}
+	_, err = conn.Write([]byte("echo"))
+	if err != nil {
+		fmt.Println(err)
+	}
+	<-done
+	buf := make([]byte, 1024)
+	r := bufio.NewReader(conn)
+	n, err := r.Read(buf)
+	if err != nil {
+		fmt.Println(err)
+	}
+	response := string(buf[:n])
+	assert.Equal(suite.T(), "echo", response)
+	suite.server.stop()
 }
 
 // In order for 'go test' to run this suite, we need to create
