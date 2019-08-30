@@ -20,7 +20,7 @@ type TestSocketService struct {
 	TestSocketServicer
 }
 
-func (tss *TestSocketService) serve(c net.Conn) {
+func (tss *TestSocketService) Serve(c net.Conn) {
 	defer c.Close()
 	tss.doService(c)
 	done <- true
@@ -73,14 +73,14 @@ func (suite *SocketServerSuite) TestInstantiate() {
 }
 
 func (suite *SocketServerSuite) TestCanStartAndStopServer() {
-	suite.server.start()
+	suite.server.Start()
 	assert.True(suite.T(), suite.server.Running())
 	suite.server.stop()
 	assert.False(suite.T(), suite.server.Running())
 }
 
 func (suite *SocketServerSuite) TestAcceptsAnIncomingConnection() {
-	suite.server.start()
+	suite.server.Start()
 	_, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
 	<-done
 
@@ -92,7 +92,7 @@ func (suite *SocketServerSuite) TestAcceptsAnIncomingConnection() {
 }
 
 func (suite *SocketServerSuite) TestAcceptsMultipleIncomingConnections() {
-	suite.server.start()
+	suite.server.Start()
 	_, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
 	<-done
 	done = make(chan bool)
@@ -155,7 +155,7 @@ func (suite *ReadingSocketServerTestSuite) TearDownTest() {
 }
 
 func (suite *ReadingSocketServerTestSuite) TestCanSendAndReceiveData() {
-	suite.server.start()
+	suite.server.Start()
 	conn, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
 	if err != nil {
 		fmt.Println(err)
@@ -222,7 +222,7 @@ func (suite *EchoSocketServerTestSuite) TearDownTest() {
 }
 
 func (suite *EchoSocketServerTestSuite) TestCanEcho() {
-	suite.server.start()
+	suite.server.Start()
 	conn, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
 	if err != nil {
 		fmt.Println(err)

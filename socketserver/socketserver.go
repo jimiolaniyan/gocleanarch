@@ -32,7 +32,7 @@ func (ss *SocketServer) Service() SocketService {
 	return ss.service
 }
 
-func (ss *SocketServer) start() {
+func (ss *SocketServer) Start() {
 	go acceptConnections(ss)
 	ss.running = true
 }
@@ -44,7 +44,7 @@ func acceptConnections(server *SocketServer) {
 			fmt.Println(err)
 			return
 		}
-		go server.service.serve(conn)
+		server.service.Serve(conn)
 	}
 }
 

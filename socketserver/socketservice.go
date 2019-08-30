@@ -3,5 +3,5 @@ package socketserver
 import "net"
 
 type SocketService interface {
-	serve(c net.Conn)
+	Serve(c net.Conn)
 }
