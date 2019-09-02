@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestPresentNoCodecastsSpec(t *testing.T) {
+func TestGivenNoCodecastsPresentNoCodecasts(t *testing.T) {
 	user := "U"
 	Convey("Given no codecasts", t, func() {
 		res := fixtures.CodecastPresentation.ClearCodecasts()
@@ -38,7 +38,7 @@ func TestPresentNoCodecastsSpec(t *testing.T) {
 
 }
 
-func TestPresentViewableCodecastsSpec(t *testing.T) {
+func TestPresentViewableCodecastsInChronologicalOrder(t *testing.T) {
 	user := "U"
 	codecast := "A"
 	Convey("Given codecasts", t, func() {
@@ -80,7 +80,7 @@ func TestPresentViewableCodecastsSpec(t *testing.T) {
 	})
 }
 
-func TestPresentDownloadableCodecastsSpec(t *testing.T) {
+func TestPresentDownloadableCodecastsInChronologicalOrder(t *testing.T) {
 	user := "U"
 	codecast := "A"
 	Convey("Given codecasts", t, func() {

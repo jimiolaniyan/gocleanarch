@@ -53,7 +53,7 @@ func (m *MockGateway) SaveCodecast(codecast *Codecast) *Codecast {
 	return codecast
 }
 
-func (m *MockGateway) FindUser(username string) *User {
+func (m *MockGateway) FindUserByName(username string) *User {
 	for _, user := range m.users {
 		if user.username == username {
 			return user
