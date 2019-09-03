@@ -9,8 +9,8 @@ type Template struct {
 	View string
 }
 
-func (t *Template) Replace(tagName string, content string) {
-	t.View = strings.Replace(t.View, "${"+tagName+"}", content, 1)
+func (t *Template) Replace(tagName string, replacement string) {
+	t.View = strings.Replace(t.View, "${"+tagName+"}", replacement, 1)
 }
 
 func CreateTemplate(templateResource string) (*Template, error) {

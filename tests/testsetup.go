@@ -11,8 +11,11 @@ func SetupContext() {
 
 func SetupSampleData() {
 	SetupContext()
-	//jimi := NewUser("bob")
-	//dayo := NewUser("dayo")
+	jimi := NewUser("jimi")
+	dayo := NewUser("dayo")
+
+	AGateway.SaveUser(jimi)
+	AGateway.SaveUser(dayo)
 
 	e1 := &Codecast{}
 	e1.SetTile("Episode 1 - The Beginning")
@@ -22,6 +25,12 @@ func SetupSampleData() {
 	e2.SetTile("Episode 2 - The Continuation")
 	e2.SetPublicationDate(e1.PublicationDate().Add(1))
 
-	//jimiE1License := NewLicense(Viewing, jimi, e1)
-	//jimiE2License := NewLicense(Viewing, jimi, e2)
+	AGateway.SaveCodecast(e1)
+	AGateway.SaveCodecast(e2)
+
+	jimiE1License := NewLicense(Viewing, jimi, e1)
+	jimiE2License := NewLicense(Viewing, jimi, e2)
+
+	AGateway.SaveLicense(jimiE1License)
+	AGateway.SaveLicense(jimiE2License)
 }
