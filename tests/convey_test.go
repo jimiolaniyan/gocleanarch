@@ -113,7 +113,58 @@ func TestPresentDownloadableCodecastsInChronologicalOrder(t *testing.T) {
 				{Title: "B", Picture: "B", Description: "B", Viewable: false},
 			}
 			So(presentedCodecasts, ShouldResemble, expected)
+
+			Reset(func() {
+				fixtures.CodecastPresentation.LogOutUser()
+				fixtures.CodecastPresentation.ClearCodecasts()
+			})
 		})
+	})
+}
+
+func TestShowEpisode(t *testing.T) {
+	user := "U"
+	permalink := "episode-1"
+
+	Convey("Given Codecasts", t, func() {
+		gc := fixtures.GivenCodecast{Title: "A", PublicationDate: "3/1/2014", Permalink: permalink}
+		ok := gc.Execute()
+		So(ok, ShouldEqual, true)
+	})
+
+	Convey("And a user U", t, func() {
+		ok := fixtures.CodecastPresentation.AddUser(user)
+		So(ok, ShouldEqual, true)
+	})
+
+	Convey("With U logged in", t, func() {
+		ok := fixtures.CodecastPresentation.LoginUser(user)
+		So(ok, ShouldEqual, true)
+
+		Convey("When the user requests details for codecast episode-1", func() {
+			details := fixtures.CodecastDetails{}
+			ok := details.RequestCodecast(permalink)
+			So(ok, ShouldBeTrue)
+
+			Convey("Then the presented title is A, published 3/01/2014", func() {
+				title := details.CodecastDetailsTitle()
+				date := details.CodecastDetailsDate()
+
+				So(title, ShouldEqual, "A")
+				So(date, ShouldEqual, "3/01/2014")
+			})
+
+			Convey("With option to purchase viewing license", func() {
+				requestViewing := details.CodecastDetailsOfferPurchaseOf("viewing")
+				So(requestViewing, ShouldBeTrue)
+			})
+
+			Convey("And option to purchase download license", func() {
+				downloadViewing := details.CodecastDetailsOfferPurchaseOf("downloading")
+				So(downloadViewing, ShouldBeTrue)
+			})
+		})
+
 	})
 }
 
@@ -122,8 +173,9 @@ func createCodeCasts() bool {
 	var codecast2 = fixtures.GivenCodecast{Title: "B", PublicationDate: "3/2/2014"}
 	var codecast3 = fixtures.GivenCodecast{Title: "C", PublicationDate: "2/18/2014"}
 
-	codecast1.Execute()
-	codecast2.Execute()
-	codecast3.Execute()
-	return true
+	res1 := codecast1.Execute()
+	res2 := codecast2.Execute()
+	res3 := codecast3.Execute()
+
+	return res1 == res2 == res3 == true
 }

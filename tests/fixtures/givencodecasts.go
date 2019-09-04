@@ -8,9 +8,10 @@ import (
 type GivenCodecast struct {
 	Title           string
 	PublicationDate string
+	Permalink       string
 }
 
-func (gc *GivenCodecast) Execute() {
+func (gc *GivenCodecast) Execute() bool {
 	codecast := &Codecast{}
 	codecast.SetTile(gc.Title)
 
@@ -18,4 +19,5 @@ func (gc *GivenCodecast) Execute() {
 
 	codecast.SetPublicationDate(t)
 	CodecastRepo.Save(codecast)
+	return true
 }

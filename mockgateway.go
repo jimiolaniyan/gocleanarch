@@ -7,8 +7,6 @@ import (
 
 type InMemoryCodecastGateway struct {
 	codecasts []*Codecast
-	users     []*User
-	licenses  []*License
 }
 
 type InMemoryUserGateway struct {
