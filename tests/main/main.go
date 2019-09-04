@@ -21,6 +21,7 @@ type MainService struct {
 }
 
 func (ms *MainService) Serve(c net.Conn) {
+	defer c.Close()
 	frontPage := getFrontPage()
 	response := makeResponse(frontPage)
 	_, err := c.Write([]byte(response))
