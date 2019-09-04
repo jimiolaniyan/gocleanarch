@@ -1,12 +1,12 @@
-package tests
+package gocleanarch
 
 import (
-	. "github.com/jimiolaniyan/gocleanarch"
 	"time"
 )
 
 func SetupContext() {
-	AGateway = NewMockGateway()
+	AGateway = &MockGateway{}
+	AUserGateway = &InMemoryUserGateway{}
 }
 
 func SetupSampleData() {

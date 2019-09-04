@@ -12,7 +12,7 @@ type codecastPresentation struct {
 }
 
 func NewCodecastPresentation() *codecastPresentation {
-	AGateway = NewMockGateway()
+	SetupContext()
 	return &codecastPresentation{gateKeeper: new(GateKeeper)}
 }
 

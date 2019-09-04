@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/jimiolaniyan/gocleanarch"
 	. "github.com/jimiolaniyan/gocleanarch/socketserver"
-	"github.com/jimiolaniyan/gocleanarch/tests"
 	"github.com/jimiolaniyan/gocleanarch/view"
 	"net"
 	"path/filepath"
@@ -81,7 +80,7 @@ func checkError(err error, message string) {
 }
 
 func main() {
-	tests.SetupSampleData()
+	gocleanarch.SetupSampleData()
 	done := make(chan bool)
 	server, _ := NewSocketServer(8081, &MainService{})
 	server.Start()

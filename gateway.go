@@ -12,3 +12,7 @@ type Gateway interface {
 	SaveLicense(license *License)
 	FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License
 }
+
+type UserGateway interface {
+	SaveUser(user *User) *User
+}

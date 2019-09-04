@@ -1,6 +1,7 @@
 package gocleanarch
 
 import (
+	"fmt"
 	"github.com/segmentio/ksuid"
 	"sort"
 )
@@ -12,8 +13,14 @@ type MockGateway struct {
 	licenses  []*License
 }
 
-func NewMockGateway() *MockGateway {
-	return &MockGateway{codecasts: []*Codecast{}}
+type InMemoryUserGateway struct {
+	users []*User
+}
+
+func (ug *InMemoryUserGateway) SaveUser(user *User) *User {
+	establishId(&user.Entity)
+	ug.users = append(ug.users, user)
+	return user
 }
 
 func (m *MockGateway) FindAllCodecastsSortedChronologically() []*Codecast {
@@ -73,6 +80,7 @@ func (m *MockGateway) FindCodecastByTitle(codecastTitle string) *Codecast {
 
 func (m *MockGateway) FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License {
 	var results []*License
+	fmt.Println(m.licenses)
 	for _, license := range m.licenses {
 		if license.User().IsSame(&user.Entity) && license.Codecast().IsSame(&codecast.Entity) {
 			results = append(results, license)

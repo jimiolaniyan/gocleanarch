@@ -15,7 +15,7 @@ type PresentCodecastUsecaseSuite struct {
 }
 
 func (suite *PresentCodecastUsecaseSuite) SetupTest() {
-	AGateway = NewMockGateway()
+	SetupContext()
 	suite.user = AGateway.SaveUser(NewUser("Shakespeare"))
 	suite.codecast = AGateway.SaveCodecast(&Codecast{})
 	suite.useCase = new(PresentCodecastUseCase)
