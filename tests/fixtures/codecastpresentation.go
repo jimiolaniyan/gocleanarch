@@ -7,13 +7,12 @@ import (
 var CodecastPresentation = NewCodecastPresentation()
 
 type codecastPresentation struct {
-	gateKeeper *GateKeeper
-	useCase    PresentCodecastUseCase
+	useCase PresentCodecastUseCase
 }
 
 func NewCodecastPresentation() *codecastPresentation {
 	SetupContext()
-	return &codecastPresentation{gateKeeper: new(GateKeeper)}
+	return &codecastPresentation{}
 }
 
 func (c *codecastPresentation) ClearCodecasts() bool {
@@ -29,7 +28,7 @@ func (c *codecastPresentation) ClearCodecasts() bool {
 func (c *codecastPresentation) LoginUser(username string) bool {
 	user := UserRepo.FindByName(username)
 	if user != nil {
-		c.gateKeeper.SetLoggedInUser(user)
+		SessionHandler.SetLoggedInUser(user)
 		return true
 	} else {
 		return false
@@ -37,7 +36,7 @@ func (c *codecastPresentation) LoginUser(username string) bool {
 }
 
 func (c *codecastPresentation) LogOutUser() {
-	c.gateKeeper.SetLoggedInUser(nil)
+	SessionHandler.SetLoggedInUser(nil)
 }
 
 func (c *codecastPresentation) AddUser(username string) bool {
@@ -46,11 +45,11 @@ func (c *codecastPresentation) AddUser(username string) bool {
 }
 
 func (c *codecastPresentation) PresentationUser() string {
-	return c.gateKeeper.LoggedInUser().Username()
+	return SessionHandler.LoggedInUser().Username()
 }
 
 func (c *codecastPresentation) CountOfCodecastsPresented() int {
-	presentations := c.useCase.PresentCodecasts(c.gateKeeper.LoggedInUser())
+	presentations := c.useCase.PresentCodecasts(SessionHandler.LoggedInUser())
 	return len(presentations)
 }
 

@@ -1,7 +1,7 @@
 package gocleanarch
 
-// CodecastGateway is an interface that defines what persistence operations are available.
-// It belongs in the interface adapters layer.
+// CodecastGateway is an interface that defines what persistence operations can be performed on codecasts.
+// It belongs in the usecases layer.
 type CodecastGateway interface {
 	FindAllCodecastsSortedChronologically() []*Codecast
 	Delete(codecast *Codecast)

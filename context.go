@@ -11,3 +11,5 @@ var CodecastRepo CodecastGateway
 var UserRepo UserGateway
 
 var LicenseRepo LicenseGateway
+
+var SessionHandler *GateKeeper

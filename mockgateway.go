@@ -5,8 +5,7 @@ import (
 	"sort"
 )
 
-// MockGateway is a mock implementation of the CodecastGateway
-type MockGateway struct {
+type InMemoryCodecastGateway struct {
 	codecasts []*Codecast
 	users     []*User
 	licenses  []*License
@@ -49,17 +48,17 @@ func (ug *InMemoryUserGateway) Save(user *User) *User {
 	return user
 }
 
-func (m *MockGateway) FindAllCodecastsSortedChronologically() []*Codecast {
-	sort.Slice(m.codecasts, func(i, j int) bool {
-		return m.codecasts[i].PublicationDate().Before(m.codecasts[j].PublicationDate())
+func (cg *InMemoryCodecastGateway) FindAllCodecastsSortedChronologically() []*Codecast {
+	sort.Slice(cg.codecasts, func(i, j int) bool {
+		return cg.codecasts[i].PublicationDate().Before(cg.codecasts[j].PublicationDate())
 	})
-	return m.codecasts
+	return cg.codecasts
 }
 
-func (m *MockGateway) Delete(codecast *Codecast) {
-	for i, cc := range m.codecasts {
+func (cg *InMemoryCodecastGateway) Delete(codecast *Codecast) {
+	for i, cc := range cg.codecasts {
 		if cc.title == codecast.title {
-			m.codecasts = append(m.codecasts[:i], m.codecasts[i+1:]...)
+			cg.codecasts = append(cg.codecasts[:i], cg.codecasts[i+1:]...)
 		}
 	}
 }
@@ -70,14 +69,14 @@ func establishId(e *Entity) {
 	}
 }
 
-func (m *MockGateway) Save(codecast *Codecast) *Codecast {
+func (cg *InMemoryCodecastGateway) Save(codecast *Codecast) *Codecast {
 	establishId(&codecast.Entity)
-	m.codecasts = append(m.codecasts, codecast)
+	cg.codecasts = append(cg.codecasts, codecast)
 	return codecast
 }
 
-func (m *MockGateway) FindByTitle(codecastTitle string) *Codecast {
-	for _, codecast := range m.codecasts {
+func (cg *InMemoryCodecastGateway) FindByTitle(codecastTitle string) *Codecast {
+	for _, codecast := range cg.codecasts {
 		if codecast.title == codecastTitle {
 			return codecast
 		}

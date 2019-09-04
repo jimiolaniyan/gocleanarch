@@ -5,9 +5,10 @@ import (
 )
 
 func SetupContext() {
-	CodecastRepo = &MockGateway{}
+	CodecastRepo = &InMemoryCodecastGateway{}
 	UserRepo = &InMemoryUserGateway{}
 	LicenseRepo = &InMemoryLicenseGateway{}
+	SessionHandler = &GateKeeper{}
 }
 
 func SetupSampleData() {
