@@ -14,8 +14,8 @@ func SetupSampleData() {
 	jimi := NewUser("jimi")
 	dayo := NewUser("dayo")
 
-	AGateway.SaveUser(jimi)
-	AGateway.SaveUser(dayo)
+	AUserGateway.SaveUser(jimi)
+	AUserGateway.SaveUser(dayo)
 
 	e1 := &Codecast{}
 	e1.SetTile("Episode 1 - The Beginning")

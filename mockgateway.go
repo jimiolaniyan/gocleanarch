@@ -1,7 +1,6 @@
 package gocleanarch
 
 import (
-	"fmt"
 	"github.com/segmentio/ksuid"
 	"sort"
 )
@@ -15,6 +14,15 @@ type MockGateway struct {
 
 type InMemoryUserGateway struct {
 	users []*User
+}
+
+func (ug *InMemoryUserGateway) FindUserByName(username string) *User {
+	for _, user := range ug.users {
+		if user.username == username {
+			return user
+		}
+	}
+	return nil
 }
 
 func (ug *InMemoryUserGateway) SaveUser(user *User) *User {
@@ -38,12 +46,6 @@ func (m *MockGateway) Delete(codecast *Codecast) {
 	}
 }
 
-func (m *MockGateway) SaveUser(user *User) *User {
-	establishId(&user.Entity)
-	m.users = append(m.users, user)
-	return user
-}
-
 func establishId(e *Entity) {
 	if e.Id() == "" {
 		e.SetId(ksuid.New().String())
@@ -60,15 +62,6 @@ func (m *MockGateway) SaveCodecast(codecast *Codecast) *Codecast {
 	return codecast
 }
 
-func (m *MockGateway) FindUserByName(username string) *User {
-	for _, user := range m.users {
-		if user.username == username {
-			return user
-		}
-	}
-	return nil
-}
-
 func (m *MockGateway) FindCodecastByTitle(codecastTitle string) *Codecast {
 	for _, codecast := range m.codecasts {
 		if codecast.title == codecastTitle {
@@ -80,7 +73,6 @@ func (m *MockGateway) FindCodecastByTitle(codecastTitle string) *Codecast {
 
 func (m *MockGateway) FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License {
 	var results []*License
-	fmt.Println(m.licenses)
 	for _, license := range m.licenses {
 		if license.User().IsSame(&user.Entity) && license.Codecast().IsSame(&codecast.Entity) {
 			results = append(results, license)

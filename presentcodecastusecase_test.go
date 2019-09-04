@@ -16,7 +16,7 @@ type PresentCodecastUsecaseSuite struct {
 
 func (suite *PresentCodecastUsecaseSuite) SetupTest() {
 	SetupContext()
-	suite.user = AGateway.SaveUser(NewUser("Shakespeare"))
+	suite.user = AUserGateway.SaveUser(NewUser("Shakespeare"))
 	suite.codecast = AGateway.SaveCodecast(&Codecast{})
 	suite.useCase = new(PresentCodecastUseCase)
 }
@@ -35,7 +35,7 @@ func (suite *PresentCodecastUsecaseSuite) TestUserWithViewLicense_CanViewCodecas
 }
 
 func (suite *PresentCodecastUsecaseSuite) TestUserWithoutViewLicense_CannotViewOtherUsersCodecast() {
-	otherUser := AGateway.SaveUser(NewUser("Atwood"))
+	otherUser := AUserGateway.SaveUser(NewUser("Atwood"))
 	viewLicence := NewLicense(Viewing, suite.user, suite.codecast)
 	AGateway.SaveLicense(viewLicence)
 	licensedToView := suite.useCase.IsLicensedFor(Viewing, otherUser, suite.codecast)
