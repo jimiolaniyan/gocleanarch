@@ -1,17 +1,20 @@
 package gocleanarch
 
-// Gateway is an interface that defines what persistence operations are available.
+// CodecastGateway is an interface that defines what persistence operations are available.
 // It belongs in the interface adapters layer.
-type Gateway interface {
+type CodecastGateway interface {
 	FindAllCodecastsSortedChronologically() []*Codecast
 	Delete(codecast *Codecast)
-	SaveCodecast(codecast *Codecast) *Codecast
-	FindCodecastByTitle(codecastTitle string) *Codecast
-	SaveLicense(license *License)
-	FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License
+	Save(codecast *Codecast) *Codecast
+	FindByTitle(codecastTitle string) *Codecast
 }
 
 type UserGateway interface {
-	SaveUser(user *User) *User
-	FindUserByName(username string) *User
+	Save(user *User) *User
+	FindByName(username string) *User
+}
+
+type LicenseGateway interface {
+	Save(license *License)
+	FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License
 }

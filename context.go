@@ -5,7 +5,9 @@ Context is an application context to ensure that certain objects
 are static during the lifetime of the application
 */
 
-// AGateway is a expected to be a concrete implementation of some form of persistence
-var AGateway Gateway
+// CodecastRepo is a expected to be a concrete implementation of some form of persistence
+var CodecastRepo CodecastGateway
 
-var AUserGateway UserGateway
+var UserRepo UserGateway
+
+var LicenseRepo LicenseGateway

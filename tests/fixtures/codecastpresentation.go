@@ -17,17 +17,17 @@ func NewCodecastPresentation() *codecastPresentation {
 }
 
 func (c *codecastPresentation) ClearCodecasts() bool {
-	var codecasts = AGateway.FindAllCodecastsSortedChronologically()
+	var codecasts = CodecastRepo.FindAllCodecastsSortedChronologically()
 
 	// TODO not a perfect solution
 	for i := len(codecasts) - 1; i >= 0; i-- {
-		AGateway.Delete(codecasts[i])
+		CodecastRepo.Delete(codecasts[i])
 	}
-	return len(AGateway.FindAllCodecastsSortedChronologically()) == 0
+	return len(CodecastRepo.FindAllCodecastsSortedChronologically()) == 0
 }
 
 func (c *codecastPresentation) LoginUser(username string) bool {
-	user := AUserGateway.FindUserByName(username)
+	user := UserRepo.FindByName(username)
 	if user != nil {
 		c.gateKeeper.SetLoggedInUser(user)
 		return true
@@ -41,7 +41,7 @@ func (c *codecastPresentation) LogOutUser() {
 }
 
 func (c *codecastPresentation) AddUser(username string) bool {
-	AUserGateway.SaveUser(NewUser(username))
+	UserRepo.Save(NewUser(username))
 	return true
 }
 
@@ -55,17 +55,17 @@ func (c *codecastPresentation) CountOfCodecastsPresented() int {
 }
 
 func (c *codecastPresentation) CreateLicenceForViewing(username string, codecastTitle string) bool {
-	user := AUserGateway.FindUserByName(username)
-	codecast := AGateway.FindCodecastByTitle(codecastTitle)
+	user := UserRepo.FindByName(username)
+	codecast := CodecastRepo.FindByTitle(codecastTitle)
 	var license = NewLicense(Viewing, user, codecast)
-	AGateway.SaveLicense(license)
+	LicenseRepo.Save(license)
 	return c.useCase.IsLicensedFor(Viewing, user, codecast)
 }
 
 func (c *codecastPresentation) CreateLicenceForDownloading(username string, codecastTitle string) bool {
-	user := AUserGateway.FindUserByName(username)
-	codecast := AGateway.FindCodecastByTitle(codecastTitle)
+	user := UserRepo.FindByName(username)
+	codecast := CodecastRepo.FindByTitle(codecastTitle)
 	var license = NewLicense(Downloading, user, codecast)
-	AGateway.SaveLicense(license)
+	LicenseRepo.Save(license)
 	return c.useCase.IsLicensedFor(Downloading, user, codecast)
 }

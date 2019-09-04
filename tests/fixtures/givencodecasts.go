@@ -17,5 +17,5 @@ func (gc *GivenCodecast) Execute() {
 	t, _ := time.Parse("1/2/2006", gc.PublicationDate)
 
 	codecast.SetPublicationDate(t)
-	AGateway.SaveCodecast(codecast)
+	CodecastRepo.Save(codecast)
 }

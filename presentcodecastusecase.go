@@ -7,7 +7,7 @@ type PresentCodecastUseCase struct {
 
 func (codecastUseCase *PresentCodecastUseCase) PresentCodecasts(loggedInUser *User) []*PresentableCodecast {
 	var presentableCodecasts []*PresentableCodecast
-	for _, codecast := range AGateway.FindAllCodecastsSortedChronologically() {
+	for _, codecast := range CodecastRepo.FindAllCodecastsSortedChronologically() {
 		presentableCodecasts = append(presentableCodecasts, codecastUseCase.formatCodecast(codecast, loggedInUser))
 	}
 	return presentableCodecasts
@@ -23,7 +23,7 @@ func (codecastUseCase *PresentCodecastUseCase) formatCodecast(codecast *Codecast
 }
 
 func (codecastUseCase *PresentCodecastUseCase) IsLicensedFor(licenseType LicenseType, user *User, codecast *Codecast) bool {
-	licenses := AGateway.FindLicensesForUserAndCodecast(user, codecast)
+	licenses := LicenseRepo.FindLicensesForUserAndCodecast(user, codecast)
 	for _, l := range licenses {
 		if l.LicenseType() == licenseType {
 			return true

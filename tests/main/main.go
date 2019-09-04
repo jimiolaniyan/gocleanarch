@@ -39,7 +39,7 @@ func makeResponse(content string) (response string) {
 
 func getFrontPage() string {
 	useCase := gocleanarch.PresentCodecastUseCase{}
-	jimi := gocleanarch.AUserGateway.FindUserByName("jimi")
+	jimi := gocleanarch.UserRepo.FindByName("jimi")
 	presentableCodecasts := useCase.PresentCodecasts(jimi)
 
 	frontPageFilePath, err := filepath.Abs("./web/html/frontpage.html")

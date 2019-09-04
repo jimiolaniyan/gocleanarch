@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-// MockGateway is a mock implementation of the Gateway
+// MockGateway is a mock implementation of the CodecastGateway
 type MockGateway struct {
 	codecasts []*Codecast
 	users     []*User
@@ -16,7 +16,25 @@ type InMemoryUserGateway struct {
 	users []*User
 }
 
-func (ug *InMemoryUserGateway) FindUserByName(username string) *User {
+type InMemoryLicenseGateway struct {
+	licenses []*License
+}
+
+func (lg *InMemoryLicenseGateway) Save(license *License) {
+	lg.licenses = append(lg.licenses, license)
+}
+
+func (lg *InMemoryLicenseGateway) FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License {
+	var results []*License
+	for _, license := range lg.licenses {
+		if license.User().IsSame(&user.Entity) && license.Codecast().IsSame(&codecast.Entity) {
+			results = append(results, license)
+		}
+	}
+	return results
+}
+
+func (ug *InMemoryUserGateway) FindByName(username string) *User {
 	for _, user := range ug.users {
 		if user.username == username {
 			return user
@@ -25,7 +43,7 @@ func (ug *InMemoryUserGateway) FindUserByName(username string) *User {
 	return nil
 }
 
-func (ug *InMemoryUserGateway) SaveUser(user *User) *User {
+func (ug *InMemoryUserGateway) Save(user *User) *User {
 	establishId(&user.Entity)
 	ug.users = append(ug.users, user)
 	return user
@@ -52,31 +70,17 @@ func establishId(e *Entity) {
 	}
 }
 
-func (m *MockGateway) SaveLicense(license *License) {
-	m.licenses = append(m.licenses, license)
-}
-
-func (m *MockGateway) SaveCodecast(codecast *Codecast) *Codecast {
+func (m *MockGateway) Save(codecast *Codecast) *Codecast {
 	establishId(&codecast.Entity)
 	m.codecasts = append(m.codecasts, codecast)
 	return codecast
 }
 
-func (m *MockGateway) FindCodecastByTitle(codecastTitle string) *Codecast {
+func (m *MockGateway) FindByTitle(codecastTitle string) *Codecast {
 	for _, codecast := range m.codecasts {
 		if codecast.title == codecastTitle {
 			return codecast
 		}
 	}
 	return nil
-}
-
-func (m *MockGateway) FindLicensesForUserAndCodecast(user *User, codecast *Codecast) []*License {
-	var results []*License
-	for _, license := range m.licenses {
-		if license.User().IsSame(&user.Entity) && license.Codecast().IsSame(&codecast.Entity) {
-			results = append(results, license)
-		}
-	}
-	return results
 }
