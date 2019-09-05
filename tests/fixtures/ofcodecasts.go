@@ -1,6 +1,9 @@
 package fixtures
 
-import . "github.com/jimiolaniyan/gocleanarch"
+import (
+	. "github.com/jimiolaniyan/gocleanarch"
+	"github.com/jimiolaniyan/gocleanarch/usecases"
+)
 
 type QueryResponse struct {
 	Title        string
@@ -12,7 +15,7 @@ type QueryResponse struct {
 
 func Query() []QueryResponse {
 	loggedInUser := SessionKeeper.LoggedInUser()
-	useCase := new(CodecastSummaryUseCase)
+	useCase := new(usecases.CodecastSummaryUseCase)
 	presentableCodecasts := useCase.PresentCodecasts(loggedInUser)
 	var response []QueryResponse
 

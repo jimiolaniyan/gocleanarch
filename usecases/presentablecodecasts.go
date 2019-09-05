@@ -1,4 +1,4 @@
-package gocleanarch
+package usecases
 
 // PresentableCodecastSummary is a data structure that returns
 // a code cast in format that is acceptable for a presenter.
@@ -8,4 +8,9 @@ type PresentableCodecastSummary struct {
 	Title           string
 	PublicationDate string
 	IsDownLoadable  bool
+}
+
+type PresentableCodecastDetails struct {
+	PresentableCodecastSummary
+	Found bool
 }

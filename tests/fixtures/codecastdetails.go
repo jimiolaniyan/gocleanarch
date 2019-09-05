@@ -2,12 +2,13 @@ package fixtures
 
 import (
 	. "github.com/jimiolaniyan/gocleanarch"
+	"github.com/jimiolaniyan/gocleanarch/usecases"
 	"strings"
 )
 
 type CodecastDetails struct {
-	useCase *CodecastDetailsUseCase
-	details *PresentableCodecastDetails
+	useCase *usecases.CodecastDetailsUseCase
+	details *usecases.PresentableCodecastDetails
 }
 
 func (cd *CodecastDetails) RequestCodecast(permalink string) bool {

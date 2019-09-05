@@ -1,4 +1,4 @@
-package gocleanarch
+package entities
 
 import "time"
 
@@ -19,6 +19,10 @@ func (c *Codecast) PublicationDate() time.Time {
 
 func (c *Codecast) SetTile(title string) {
 	c.title = title
+}
+
+func (c *Codecast) Permalink() string {
+	return c.permalink
 }
 
 func (c *Codecast) SetPublicationDate(publicationDate time.Time) {

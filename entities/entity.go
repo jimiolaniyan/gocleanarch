@@ -1,4 +1,4 @@
-package gocleanarch
+package entities
 
 type Entity struct {
 	id string

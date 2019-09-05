@@ -1,6 +1,8 @@
-package gocleanarch
+package usecases
 
 import (
+	"github.com/jimiolaniyan/gocleanarch"
+	"github.com/jimiolaniyan/gocleanarch/entities"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -10,15 +12,15 @@ import (
 
 type CodecastDetailsUseCaseSuite struct {
 	suite.Suite
-	user     *User
-	codecast *Codecast
+	user     *entities.User
+	codecast *entities.Codecast
 	useCase  *CodecastDetailsUseCase
 }
 
 func (suite *CodecastDetailsUseCaseSuite) SetupTest() {
-	SetupContext()
-	suite.user = UserRepo.Save(NewUser("User"))
-	suite.codecast = CodecastRepo.Save(&Codecast{})
+	gocleanarch.SetupContext()
+	suite.user = gocleanarch.UserRepo.Save(entities.NewUser("User"))
+	suite.codecast = gocleanarch.CodecastRepo.Save(&entities.Codecast{})
 	suite.useCase = new(CodecastDetailsUseCase)
 }
 
@@ -28,7 +30,7 @@ func (suite *CodecastDetailsUseCaseSuite) TestCreatesCodecastDetailsPresentation
 	suite.codecast.SetPublicationDate(time.Date(2015, 1, 02, 0, 0, 0, 0, time.UTC))
 
 	useCase := &CodecastDetailsUseCase{}
-	details := useCase.RequestCodecastDetails(SessionKeeper.loggedInUser, "permalink-a")
+	details := useCase.RequestCodecastDetails(gocleanarch.SessionKeeper.LoggedInUser(), "permalink-a")
 
 	assert.Equal(suite.T(), "Codecast", details.Title)
 	assert.Equal(suite.T(), "1/02/2015", details.PublicationDate)
@@ -36,7 +38,7 @@ func (suite *CodecastDetailsUseCaseSuite) TestCreatesCodecastDetailsPresentation
 
 func (suite *CodecastDetailsUseCaseSuite) TestDoesntCrashOnMissingCodecast() {
 	useCase := &CodecastDetailsUseCase{}
-	details := useCase.RequestCodecastDetails(SessionKeeper.loggedInUser, "missing")
+	details := useCase.RequestCodecastDetails(gocleanarch.SessionKeeper.LoggedInUser(), "missing")
 
 	assert.False(suite.T(), details.Found)
 }

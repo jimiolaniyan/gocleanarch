@@ -1,4 +1,4 @@
-package gocleanarch
+package entities
 
 type License struct {
 	Entity

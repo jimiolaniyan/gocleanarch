@@ -2,12 +2,14 @@ package fixtures
 
 import (
 	. "github.com/jimiolaniyan/gocleanarch"
+	"github.com/jimiolaniyan/gocleanarch/entities"
+	"github.com/jimiolaniyan/gocleanarch/usecases"
 )
 
 var CodecastPresentation = NewCodecastPresentation()
 
 type codecastPresentation struct {
-	useCase CodecastSummaryUseCase
+	useCase usecases.CodecastSummaryUseCase
 }
 
 func NewCodecastPresentation() *codecastPresentation {
@@ -39,7 +41,7 @@ func (c *codecastPresentation) LogOutUser() {
 }
 
 func (c *codecastPresentation) AddUser(username string) bool {
-	UserRepo.Save(NewUser(username))
+	UserRepo.Save(entities.NewUser(username))
 	return true
 }
 
@@ -55,15 +57,15 @@ func (c *codecastPresentation) CountOfCodecastsPresented() int {
 func (c *codecastPresentation) CreateLicenceForViewing(username string, codecastTitle string) bool {
 	user := UserRepo.FindByName(username)
 	codecast := CodecastRepo.FindByTitle(codecastTitle)
-	var license = NewLicense(Viewing, user, codecast)
+	var license = entities.NewLicense(entities.Viewing, user, codecast)
 	LicenseRepo.Save(license)
-	return c.useCase.IsLicensedFor(Viewing, user, codecast)
+	return c.useCase.IsLicensedFor(entities.Viewing, user, codecast)
 }
 
 func (c *codecastPresentation) CreateLicenceForDownloading(username string, codecastTitle string) bool {
 	user := UserRepo.FindByName(username)
 	codecast := CodecastRepo.FindByTitle(codecastTitle)
-	var license = NewLicense(Downloading, user, codecast)
+	var license = entities.NewLicense(entities.Downloading, user, codecast)
 	LicenseRepo.Save(license)
-	return c.useCase.IsLicensedFor(Downloading, user, codecast)
+	return c.useCase.IsLicensedFor(entities.Downloading, user, codecast)
 }

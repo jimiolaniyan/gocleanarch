@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jimiolaniyan/gocleanarch"
 	. "github.com/jimiolaniyan/gocleanarch/socketserver"
+	"github.com/jimiolaniyan/gocleanarch/usecases"
 	"github.com/jimiolaniyan/gocleanarch/view"
 	"net"
 	"path/filepath"
@@ -38,7 +39,7 @@ func makeResponse(content string) (response string) {
 }
 
 func getFrontPage() string {
-	useCase := gocleanarch.CodecastSummaryUseCase{}
+	useCase := usecases.CodecastSummaryUseCase{}
 	jimi := gocleanarch.UserRepo.FindByName("jimi")
 	presentableCodecasts := useCase.PresentCodecasts(jimi)
 

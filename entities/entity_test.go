@@ -1,4 +1,4 @@
-package gocleanarch
+package entities
 
 import (
 	"github.com/stretchr/testify/assert"

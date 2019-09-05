@@ -1,4 +1,4 @@
-package gocleanarch
+package entities
 
 // User is a simple data structure for a user. It belongs in the Entities layer.
 type User struct {
