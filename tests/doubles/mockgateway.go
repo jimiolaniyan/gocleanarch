@@ -1,4 +1,4 @@
-package gocleanarch
+package doubles
 
 import (
 	"github.com/jimiolaniyan/gocleanarch/entities"

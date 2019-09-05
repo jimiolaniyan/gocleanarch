@@ -1,7 +1,9 @@
-package gocleanarch
+package setup
 
 import (
+	. "github.com/jimiolaniyan/gocleanarch"
 	"github.com/jimiolaniyan/gocleanarch/entities"
+	. "github.com/jimiolaniyan/gocleanarch/tests/doubles"
 	"time"
 )
 

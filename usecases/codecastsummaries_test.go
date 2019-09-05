@@ -3,6 +3,7 @@ package usecases
 import (
 	"github.com/jimiolaniyan/gocleanarch"
 	"github.com/jimiolaniyan/gocleanarch/entities"
+	"github.com/jimiolaniyan/gocleanarch/tests/setup"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -17,7 +18,7 @@ type PresentCodecastUseCaseSuite struct {
 }
 
 func (suite *PresentCodecastUseCaseSuite) SetupTest() {
-	gocleanarch.SetupContext()
+	setup.SetupContext()
 	suite.user = gocleanarch.UserRepo.Save(entities.NewUser("Shakespeare"))
 	suite.codecast = gocleanarch.CodecastRepo.Save(&entities.Codecast{})
 	suite.useCase = new(CodecastSummaryUseCase)

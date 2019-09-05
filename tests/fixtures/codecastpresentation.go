@@ -3,6 +3,7 @@ package fixtures
 import (
 	. "github.com/jimiolaniyan/gocleanarch"
 	"github.com/jimiolaniyan/gocleanarch/entities"
+	"github.com/jimiolaniyan/gocleanarch/tests/setup"
 	"github.com/jimiolaniyan/gocleanarch/usecases"
 )
 
@@ -13,7 +14,7 @@ type codecastPresentation struct {
 }
 
 func NewCodecastPresentation() *codecastPresentation {
-	SetupContext()
+	setup.SetupContext()
 	return &codecastPresentation{}
 }
 

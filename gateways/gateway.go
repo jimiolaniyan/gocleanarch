@@ -1,4 +1,4 @@
-package gocleanarch
+package gateways
 
 import "github.com/jimiolaniyan/gocleanarch/entities"
 
