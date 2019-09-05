@@ -5,16 +5,16 @@ import (
 	"sort"
 )
 
-type InMemoryCodecastGateway struct {
-	codecasts []*Codecast
+type InMemoryLicenseGateway struct {
+	licenses []*License
 }
 
 type InMemoryUserGateway struct {
 	users []*User
 }
 
-type InMemoryLicenseGateway struct {
-	licenses []*License
+type InMemoryCodecastGateway struct {
+	codecasts []*Codecast
 }
 
 func (lg *InMemoryLicenseGateway) Save(license *License) {
@@ -76,6 +76,15 @@ func (cg *InMemoryCodecastGateway) Save(codecast *Codecast) *Codecast {
 func (cg *InMemoryCodecastGateway) FindByTitle(codecastTitle string) *Codecast {
 	for _, codecast := range cg.codecasts {
 		if codecast.title == codecastTitle {
+			return codecast
+		}
+	}
+	return nil
+}
+
+func (cg *InMemoryCodecastGateway) FindByPermalink(permalink string) *Codecast {
+	for _, codecast := range cg.codecasts {
+		if codecast.permalink == permalink {
 			return codecast
 		}
 	}

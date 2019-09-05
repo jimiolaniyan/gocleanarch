@@ -8,7 +8,7 @@ func SetupContext() {
 	CodecastRepo = &InMemoryCodecastGateway{}
 	UserRepo = &InMemoryUserGateway{}
 	LicenseRepo = &InMemoryLicenseGateway{}
-	SessionHandler = &GateKeeper{}
+	SessionKeeper = &GateKeeper{}
 }
 
 func SetupSampleData() {

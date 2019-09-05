@@ -1,10 +1,18 @@
 package fixtures
 
+import (
+	"fmt"
+	. "github.com/jimiolaniyan/gocleanarch"
+)
+
 type CodecastDetails struct {
+	useCase CodecastDetailsUseCase
+	details *PresentableCodecastDetails
 }
 
 func (cd *CodecastDetails) RequestCodecast(permalink string) bool {
-	return false
+	cd.details = cd.useCase.RequestCodecastDetails(SessionKeeper.LoggedInUser(), permalink)
+	return cd.details != nil
 }
 
 func (cd *CodecastDetails) CodecastDetailsOfferPurchaseOf(licenseType string) bool {
@@ -12,9 +20,10 @@ func (cd *CodecastDetails) CodecastDetailsOfferPurchaseOf(licenseType string) bo
 }
 
 func (cd *CodecastDetails) CodecastDetailsTitle() string {
-	return "NULL"
+	return cd.details.Title
 }
 
 func (cd *CodecastDetails) CodecastDetailsDate() string {
-	return "NULL"
+	fmt.Println(cd.details.PublicationDate)
+	return cd.details.PublicationDate
 }

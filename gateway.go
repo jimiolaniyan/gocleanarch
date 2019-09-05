@@ -7,6 +7,7 @@ type CodecastGateway interface {
 	Delete(codecast *Codecast)
 	Save(codecast *Codecast) *Codecast
 	FindByTitle(codecastTitle string) *Codecast
+	FindByPermalink(permalink string) *Codecast
 }
 
 type UserGateway interface {

@@ -28,15 +28,14 @@ func (c *codecastPresentation) ClearCodecasts() bool {
 func (c *codecastPresentation) LoginUser(username string) bool {
 	user := UserRepo.FindByName(username)
 	if user != nil {
-		SessionHandler.SetLoggedInUser(user)
+		SessionKeeper.SetLoggedInUser(user)
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 func (c *codecastPresentation) LogOutUser() {
-	SessionHandler.SetLoggedInUser(nil)
+	SessionKeeper.SetLoggedInUser(nil)
 }
 
 func (c *codecastPresentation) AddUser(username string) bool {
@@ -45,11 +44,11 @@ func (c *codecastPresentation) AddUser(username string) bool {
 }
 
 func (c *codecastPresentation) PresentationUser() string {
-	return SessionHandler.LoggedInUser().Username()
+	return SessionKeeper.LoggedInUser().Username()
 }
 
 func (c *codecastPresentation) CountOfCodecastsPresented() int {
-	presentations := c.useCase.PresentCodecasts(SessionHandler.LoggedInUser())
+	presentations := c.useCase.PresentCodecasts(SessionKeeper.LoggedInUser())
 	return len(presentations)
 }
 

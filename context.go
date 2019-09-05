@@ -12,4 +12,4 @@ var UserRepo UserGateway
 
 var LicenseRepo LicenseGateway
 
-var SessionHandler *GateKeeper
+var SessionKeeper *GateKeeper

@@ -15,9 +15,10 @@ func (gc *GivenCodecast) Execute() bool {
 	codecast := &Codecast{}
 	codecast.SetTile(gc.Title)
 
-	t, _ := time.Parse("1/2/2006", gc.PublicationDate)
+	date, _ := time.Parse("1/2/2006", gc.PublicationDate)
 
-	codecast.SetPublicationDate(t)
+	codecast.SetPublicationDate(date)
+	codecast.SetPermalink(gc.Permalink)
 	CodecastRepo.Save(codecast)
 	return true
 }
