@@ -160,7 +160,7 @@ func TestShowEpisode(t *testing.T) {
 			})
 
 			Convey("And option to purchase download license", func() {
-				downloadViewing := details.CodecastDetailsOfferPurchaseOf("downloading")
+				downloadViewing := details.CodecastDetailsOfferPurchaseOf("download")
 				So(downloadViewing, ShouldBeTrue)
 			})
 		})

@@ -7,7 +7,6 @@ func (useCase *CodecastDetailsUseCase) RequestCodecastDetails(user *User, permal
 	details := &PresentableCodecastDetails{}
 
 	codecast := CodecastRepo.FindByPermalink(permalink)
-	details.Title = codecast.title
-	details.PublicationDate = codecast.PublicationDate().Format("1/02/2006")
+	new(PresentCodecastUseCase).DoFormatCodecast(&details.PresentableCodecast, codecast, user)
 	return details
 }

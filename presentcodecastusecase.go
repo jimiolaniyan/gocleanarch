@@ -15,11 +15,15 @@ func (codecastUseCase *PresentCodecastUseCase) PresentCodecasts(loggedInUser *Us
 
 func (codecastUseCase *PresentCodecastUseCase) formatCodecast(codecast *Codecast, user *User) *PresentableCodecast {
 	pc := &PresentableCodecast{}
+	codecastUseCase.DoFormatCodecast(pc, codecast, user)
+	return pc
+}
+
+func (codecastUseCase *PresentCodecastUseCase) DoFormatCodecast(pc *PresentableCodecast, codecast *Codecast, user *User) {
 	pc.Title = codecast.Title()
-	pc.PublicationDate = codecast.PublicationDate().Format("1/2/2006")
+	pc.PublicationDate = codecast.PublicationDate().Format("1/02/2006")
 	pc.IsViewable = codecastUseCase.IsLicensedFor(Viewing, user, codecast)
 	pc.IsDownLoadable = codecastUseCase.IsLicensedFor(Downloading, user, codecast)
-	return pc
 }
 
 func (codecastUseCase *PresentCodecastUseCase) IsLicensedFor(licenseType LicenseType, user *User, codecast *Codecast) bool {
