@@ -38,7 +38,7 @@ func makeResponse(content string) (response string) {
 }
 
 func getFrontPage() string {
-	useCase := gocleanarch.PresentCodecastUseCase{}
+	useCase := gocleanarch.CodecastSummaryUseCase{}
 	jimi := gocleanarch.UserRepo.FindByName("jimi")
 	presentableCodecasts := useCase.PresentCodecasts(jimi)
 

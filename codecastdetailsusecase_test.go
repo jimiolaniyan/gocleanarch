@@ -34,6 +34,13 @@ func (suite *CodecastDetailsUseCaseSuite) TestCreatesCodecastDetailsPresentation
 	assert.Equal(suite.T(), "1/02/2015", details.PublicationDate)
 }
 
+func (suite *CodecastDetailsUseCaseSuite) TestDoesntCrashOnMissingCodecast() {
+	useCase := &CodecastDetailsUseCase{}
+	details := useCase.RequestCodecastDetails(SessionKeeper.loggedInUser, "missing")
+
+	assert.False(suite.T(), details.Found)
+}
+
 func TestCodecastDetailsUseCaseSuite(t *testing.T) {
 	suite.Run(t, new(CodecastDetailsUseCaseSuite))
 }

@@ -7,7 +7,7 @@ import (
 var CodecastPresentation = NewCodecastPresentation()
 
 type codecastPresentation struct {
-	useCase PresentCodecastUseCase
+	useCase CodecastSummaryUseCase
 }
 
 func NewCodecastPresentation() *codecastPresentation {

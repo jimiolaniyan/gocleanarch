@@ -2,5 +2,6 @@ package gocleanarch
 
 
 type PresentableCodecastDetails struct {
-	PresentableCodecast
+	PresentableCodecastSummary
+	Found bool
 }

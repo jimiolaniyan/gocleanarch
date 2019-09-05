@@ -11,14 +11,14 @@ type PresentCodecastUsecaseSuite struct {
 	suite.Suite
 	user     *User
 	codecast *Codecast
-	useCase  *PresentCodecastUseCase
+	useCase  *CodecastSummaryUseCase
 }
 
 func (suite *PresentCodecastUsecaseSuite) SetupTest() {
 	SetupContext()
 	suite.user = UserRepo.Save(NewUser("Shakespeare"))
 	suite.codecast = CodecastRepo.Save(&Codecast{})
-	suite.useCase = new(PresentCodecastUseCase)
+	suite.useCase = new(CodecastSummaryUseCase)
 }
 
 func (suite *PresentCodecastUsecaseSuite) TestUserWithoutViewLicense_CannotViewCodecast() {
