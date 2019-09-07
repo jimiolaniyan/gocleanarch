@@ -4,9 +4,10 @@ package usecases
 // a code cast in format that is acceptable for a presenter.
 // It belongs in the interface adapters layer
 type PresentableCodecastSummary struct {
-	IsViewable      bool
 	Title           string
 	PublicationDate string
+	Permalink       string
+	IsViewable      bool
 	IsDownLoadable  bool
 }
 

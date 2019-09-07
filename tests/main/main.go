@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/jimiolaniyan/gocleanarch"
+	"github.com/jimiolaniyan/gocleanarch/http"
 	. "github.com/jimiolaniyan/gocleanarch/socketserver"
 	"github.com/jimiolaniyan/gocleanarch/tests/setup"
 	"github.com/jimiolaniyan/gocleanarch/usecases"
@@ -23,12 +25,41 @@ type MainService struct {
 
 func (ms *MainService) Serve(c net.Conn) {
 	defer c.Close()
-	frontPage := getFrontPage()
-	response := makeResponse(frontPage)
-	_, err := c.Write([]byte(response))
-	if err != nil {
-		fmt.Println(err)
+	r := bufio.NewReader(c)
+	line, err := r.ReadString(byte('\n'))
+	checkError(err, "")
+
+	request := new(http.RequestParser).Parse(line)
+	if response := router.Route(request); response != "" {
+		_, err = c.Write([]byte(response))
 	}
+
+	_ , err = c.Write([]byte("HTTP/1.1 404 Not Found\n"))
+
+	checkError(err, "")
+}
+
+type CodecastSummariesController struct {
+}
+
+func (c *CodecastSummariesController) Handle(request *http.ParsedRequest) string {
+	frontPage := getFrontPage()
+	return makeResponse(frontPage)
+}
+
+var router *http.Router
+
+func main() {
+	setup.SetupSampleData()
+
+	router = http.NewRouter()
+	router.AddPath("", &CodecastSummariesController{})
+	//router.AddPath("/episode", CodecastDetailsController{})
+
+	done := make(chan bool)
+	server, _ := NewSocketServer(8081, &MainService{})
+	server.Start()
+	<-done
 }
 
 func makeResponse(content string) (response string) {
@@ -40,7 +71,7 @@ func makeResponse(content string) (response string) {
 }
 
 func getFrontPage() string {
-	useCase := usecases.CodecastSummaryUseCase{}
+	useCase := usecases.CodecastSummariesUseCase{}
 	jimi := gocleanarch.UserRepo.FindByName("jimi")
 	presentableCodecasts := useCase.PresentCodecasts(jimi)
 
@@ -57,6 +88,7 @@ func getFrontPage() string {
 			codecastTemplate, _ := view.CreateTemplate(codecastPath)
 			codecastTemplate.Replace("title", pc.Title)
 			codecastTemplate.Replace("publicationDate", pc.PublicationDate)
+			codecastTemplate.Replace("permalink", pc.Permalink)
 
 			//staged
 			codecastTemplate.Replace("thumbnail", "https://cleancoders.com/images/portraits/robert-martin.jpg")
@@ -65,8 +97,6 @@ func getFrontPage() string {
 			codecastTemplate.Replace("contentActions", "Buying options go here.")
 			codecastLines.WriteString(codecastTemplate.View)
 		}
-
-		fmt.Println(codecastLines.String())
 
 		frontPageTemplate.Replace("codecasts", codecastLines.String())
 
@@ -79,12 +109,4 @@ func checkError(err error, message string) {
 	if err != nil {
 		fmt.Printf("%s: %s", message, err)
 	}
-}
-
-func main() {
-	setup.SetupSampleData()
-	done := make(chan bool)
-	server, _ := NewSocketServer(8081, &MainService{})
-	server.Start()
-	<-done
 }

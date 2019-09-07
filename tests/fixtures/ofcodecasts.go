@@ -15,7 +15,7 @@ type QueryResponse struct {
 
 func Query() []QueryResponse {
 	loggedInUser := SessionKeeper.LoggedInUser()
-	useCase := new(usecases.CodecastSummaryUseCase)
+	useCase := new(usecases.CodecastSummariesUseCase)
 	presentableCodecasts := useCase.PresentCodecasts(loggedInUser)
 	var response []QueryResponse
 

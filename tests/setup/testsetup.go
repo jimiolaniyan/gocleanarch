@@ -25,10 +25,12 @@ func SetupSampleData() {
 	e1 := &entities.Codecast{}
 	e1.SetTile("Episode 1 - The Beginning")
 	e1.SetPublicationDate(time.Now())
+	e1.SetPermalink("e1")
 
 	e2 := &entities.Codecast{}
 	e2.SetTile("Episode 2 - The Continuation")
 	e2.SetPublicationDate(e1.PublicationDate().Add(1))
+	e2.SetPermalink("e2")
 
 	CodecastRepo.Save(e1)
 	CodecastRepo.Save(e2)

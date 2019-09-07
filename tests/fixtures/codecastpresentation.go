@@ -10,7 +10,7 @@ import (
 var CodecastPresentation = NewCodecastPresentation()
 
 type codecastPresentation struct {
-	useCase usecases.CodecastSummaryUseCase
+	useCase usecases.CodecastSummariesUseCase
 }
 
 func NewCodecastPresentation() *codecastPresentation {

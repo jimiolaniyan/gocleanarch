@@ -14,14 +14,14 @@ type PresentCodecastUseCaseSuite struct {
 	suite.Suite
 	user     *entities.User
 	codecast *entities.Codecast
-	useCase  *CodecastSummaryUseCase
+	useCase  *CodecastSummariesUseCase
 }
 
 func (suite *PresentCodecastUseCaseSuite) SetupTest() {
 	setup.SetupContext()
 	suite.user = gocleanarch.UserRepo.Save(entities.NewUser("Shakespeare"))
 	suite.codecast = gocleanarch.CodecastRepo.Save(&entities.Codecast{})
-	suite.useCase = new(CodecastSummaryUseCase)
+	suite.useCase = new(CodecastSummariesUseCase)
 }
 
 func (suite *PresentCodecastUseCaseSuite) TestUserWithoutViewLicense_CannotViewCodecast() {
@@ -55,14 +55,16 @@ func (suite *PresentCodecastUseCaseSuite) TestPresentingNoCodecasts() {
 
 func (suite *PresentCodecastUseCaseSuite) TestPresentOneCodecast() {
 	suite.codecast.SetTile("Some Title")
-	date := time.Date(2011, 5, 22, 00, 00, 00, 000, time.UTC)
-	suite.codecast.SetPublicationDate(date)
+	suite.codecast.SetPublicationDate(time.Date(2011, 5, 22, 00, 00, 00, 000, time.UTC))
+	suite.codecast.SetPermalink("permalink")
+
 	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
 	pc := presentableCodeCasts[0]
 
 	assert.True(suite.T(), len(presentableCodeCasts) == 1)
 	assert.True(suite.T(), "Some Title" == pc.Title)
-	assert.True(suite.T(), date.Format("1/2/2006") == pc.PublicationDate)
+	assert.True(suite.T(), "5/22/2011" == pc.PublicationDate)
+	assert.True(suite.T(), "permalink" == pc.Permalink)
 }
 
 func (suite *PresentCodecastUseCaseSuite) TestPresentedCodecastIsNotViewableIfNoLicense() {
