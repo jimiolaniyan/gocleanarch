@@ -233,14 +233,40 @@ func (suite *EchoSocketServerTestSuite) TestCanEcho() {
 	}
 	<-done
 	buf := make([]byte, 1024)
-	r := bufio.NewReader(conn)
-	n, err := r.Read(buf)
+	n, err := bufio.NewReader(conn).Read(buf)
 	if err != nil {
 		fmt.Println(err)
 	}
-	response := string(buf[:n])
-	assert.Equal(suite.T(), "echo", response)
+	assert.Equal(suite.T(), "echo", string(buf[:n]))
 	suite.server.stop()
+}
+
+func (suite *EchoSocketServerTestSuite) TestMultipleEcho() {
+	suite.server.Start()
+	conn1, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
+	conn2, err := net.Dial("tcp", "localhost:"+strconv.Itoa(suite.port))
+	checkError(err)
+
+	_, err = conn1.Write([]byte("echo1"))
+	_, err = conn2.Write([]byte("echo2"))
+	checkError(err)
+	<-done
+
+	buf1 := make([]byte, 1024)
+	buf2 := make([]byte, 1024)
+	n1, err := bufio.NewReader(conn1).Read(buf1)
+	n2, err := bufio.NewReader(conn2).Read(buf2)
+	checkError(err)
+
+	assert.Equal(suite.T(), "echo1", string(buf1[:n1]))
+	assert.Equal(suite.T(), "echo2", string(buf2[:n2]))
+	suite.server.stop()
+}
+
+func checkError(err error) {
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 // In order for 'go test' to run this suite, we need to create
