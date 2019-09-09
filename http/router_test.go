@@ -44,7 +44,16 @@ func (suite *RouterTestSuite) TestRootPath() {
 	assert.Equal(suite.T(), actualRequest, req)
 }
 
+func (suite *RouterTestSuite) Test404() {
+	request := &ParsedRequest{Method: "GET", Path: "/something-missing"}
+
+	result := suite.router.Route(request)
+
+	assert.Equal(suite.T(), "HTTP/1.1 404 Not Found", result)
+}
+
 type TestController struct {
+	DefaultController
 }
 
 func (t *TestController) Handle(request *ParsedRequest) string {

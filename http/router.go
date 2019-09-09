@@ -13,12 +13,11 @@ func NewRouter() *Router {
 }
 
 func (r *Router) Route(request *ParsedRequest) string {
-	println(request.Path)
 	parts := strings.Split(request.Path, "/")
 	controllerKey := parts[1]
 	controller := r.routes[controllerKey]
 	if controller == nil {
-		return ""
+		return "HTTP/1.1 404 Not Found"
 	}
 	return controller.Handle(request)
 }
