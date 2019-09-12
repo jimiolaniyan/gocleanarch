@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func SetupContext() {
+func LoadContext() {
 	CodecastRepo = &InMemoryCodecastGateway{}
 	UserRepo = &InMemoryUserGateway{}
 	LicenseRepo = &InMemoryLicenseGateway{}
@@ -15,7 +15,7 @@ func SetupContext() {
 }
 
 func SetupSampleData() {
-	SetupContext()
+	LoadContext()
 	jimi := entities.NewUser("jimi")
 	dayo := entities.NewUser("dayo")
 

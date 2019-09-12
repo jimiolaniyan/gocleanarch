@@ -19,7 +19,7 @@ type CodecastDetailsUseCaseSuite struct {
 }
 
 func (suite *CodecastDetailsUseCaseSuite) SetupTest() {
-	setup.SetupContext()
+	setup.LoadContext()
 	suite.user = gocleanarch.UserRepo.Save(entities.NewUser("User"))
 	suite.codecast = gocleanarch.CodecastRepo.Save(&entities.Codecast{})
 	suite.useCase = new(CodecastDetailsUseCase)

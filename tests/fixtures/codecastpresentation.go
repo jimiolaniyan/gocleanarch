@@ -14,7 +14,7 @@ type codecastPresentation struct {
 }
 
 func NewCodecastPresentation() *codecastPresentation {
-	setup.SetupContext()
+	setup.LoadContext()
 	return &codecastPresentation{}
 }
 
