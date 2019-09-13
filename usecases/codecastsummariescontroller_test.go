@@ -23,20 +23,20 @@ func (c *CodecastSummaryInputBoundarySpy) SummarizeCodecasts(loggedInUser *entit
 }
 
 type CodecastSummaryOutputBoundarySpy struct {
-	ResponseModel *CodecastSummaryResponseModel
+	ViewModel *CodecastSummariesViewModel
 }
 
-func (c *CodecastSummaryOutputBoundarySpy) GetResponseModel() *CodecastSummaryResponseModel {
-	return c.ResponseModel
+func (c *CodecastSummaryOutputBoundarySpy) GetViewModel() *CodecastSummariesViewModel {
+	return c.ViewModel
 }
 
 type CodecastSummaryViewSpy struct {
 	generateViewWasCalled bool
-	ResponseModel         *CodecastSummaryResponseModel
+	ViewModel             *CodecastSummariesViewModel
 }
 
-func (c *CodecastSummaryViewSpy) Generate(model *CodecastSummaryResponseModel) string {
-	c.ResponseModel = model
+func (c *CodecastSummaryViewSpy) Generate(model *CodecastSummariesViewModel) string {
+	c.ViewModel = model
 	c.generateViewWasCalled = true
 	return  ""
 }
@@ -68,14 +68,15 @@ func (suite *CodecastSummariesControllerTestSuite) TestInputBoundaryInvocation()
 	assert.Equal(suite.T(), suite.presenterSpy, suite.useCaseSpy.OutputBoundary)
 }
 
-func (suite *CodecastSummariesControllerTestSuite) TestControllerSendsTheResponseModelToTheView() {
+func (suite *CodecastSummariesControllerTestSuite) TestControllerSendsTheViewModelToTheView() {
 	request := &ParsedRequest{Method: "GET", Path: "bla"}
-	suite.presenterSpy.ResponseModel = &CodecastSummaryResponseModel{}
+
+	suite.presenterSpy.ViewModel = &CodecastSummariesViewModel{}
 
 	suite.controller.Handle(request)
 
 	assert.True(suite.T(), suite.viewSpy.generateViewWasCalled)
-	assert.Equal(suite.T(), suite.presenterSpy.ResponseModel, suite.viewSpy.ResponseModel)
+	assert.Equal(suite.T(), suite.presenterSpy.ViewModel, suite.viewSpy.ViewModel)
 }
 
 func TestCodecastSummariesControllerSuite(t *testing.T) {

@@ -7,5 +7,5 @@ type CodecastSummariesInputBoundary interface {
 }
 
 type CodecastSummariesOutputBoundary interface {
-	GetResponseModel() *CodecastSummaryResponseModel
+	GetViewModel() *CodecastSummariesViewModel
 }

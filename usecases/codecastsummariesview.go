@@ -8,18 +8,18 @@ import (
 )
 
 type CodecastSummariesView interface {
-	Generate(model *CodecastSummaryResponseModel) string
+	Generate(model *CodecastSummariesViewModel) string
 }
 
 type CodecastSummariesViewImpl struct {
 
 }
 
-func (c *CodecastSummariesViewImpl) Generate(model *CodecastSummaryResponseModel) string {
+func (c *CodecastSummariesViewImpl) Generate(model *CodecastSummariesViewModel) string {
 	return ""
 }
 
-func (c CodecastSummariesViewImpl) toHTML(presentableCodecasts []*PresentableCodecastSummary) string {
+func (c CodecastSummariesViewImpl) toHTML(presentableCodecasts []*CodecastSummariesResponseModel) string {
 	frontPageFilePath, err := filepath.Abs("./web/html/frontpage.html")
 	checkError(err, fmt.Sprintf("Could not open %s", "./web/html/frontpage.html"))
 

@@ -16,7 +16,7 @@ type CodecastSummariesController struct {
 func (c *CodecastSummariesController) Handle(request *ParsedRequest) string {
 	user := gocleanarch.SessionKeeper.LoggedInUser()
 	c.UseCase.SummarizeCodecasts(user, c.Presenter)
-	c.View.Generate(c.Presenter.GetResponseModel())
+	c.View.Generate(c.Presenter.GetViewModel())
 	return ""
 	//useCase := CodecastSummariesUseCase{}
 	//jimi := gocleanarch.UserRepo.FindByName("jimi")

@@ -10,11 +10,20 @@ import (
 type CodecastSummariesUseCase struct {
 }
 
-type CodecastSummaryResponseModel struct {
+func (c *CodecastSummariesUseCase) SummarizeCodecasts(*entities.User, CodecastSummariesOutputBoundary) {
+
 }
 
-func (codecastUseCase *CodecastSummariesUseCase) PresentCodecasts(loggedInUser *entities.User) []*PresentableCodecastSummary {
-	var presentableCodecasts []*PresentableCodecastSummary
+type CodecastSummariesResponseModel struct {
+	Title           string
+	PublicationDate string
+	Permalink       string
+	IsViewable      bool
+	IsDownLoadable  bool
+}
+
+func (c *CodecastSummariesUseCase) PresentCodecasts(loggedInUser *entities.User) []*CodecastSummariesResponseModel {
+	var presentableCodecasts []*CodecastSummariesResponseModel
 	for _, codecast := range CodecastRepo.FindAllCodecastsSortedChronologically() {
 		presentableCodecasts = append(presentableCodecasts, CodecastSummariesPresenter{}.FormatCodecast(codecast, loggedInUser))
 	}
@@ -32,3 +41,4 @@ func (codecastUseCase *CodecastSummariesUseCase) IsLicensedFor(licenseType entit
 	}
 	return false
 }
+
