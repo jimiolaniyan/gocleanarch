@@ -7,11 +7,19 @@ import (
 	"strings"
 )
 
-type CodecastSummariesView struct {
+type CodecastSummariesView interface {
+	Generate(model *CodecastSummaryResponseModel) string
+}
+
+type CodecastSummariesViewImpl struct {
 
 }
 
-func (c CodecastSummariesView) toHTML(presentableCodecasts []*PresentableCodecastSummary) string {
+func (c *CodecastSummariesViewImpl) Generate(model *CodecastSummaryResponseModel) string {
+	return ""
+}
+
+func (c CodecastSummariesViewImpl) toHTML(presentableCodecasts []*PresentableCodecastSummary) string {
 	frontPageFilePath, err := filepath.Abs("./web/html/frontpage.html")
 	checkError(err, fmt.Sprintf("Could not open %s", "./web/html/frontpage.html"))
 

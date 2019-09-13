@@ -13,7 +13,7 @@ import (
 var router *http.Router
 
 func main() {
-	setup.SetupSampleData()
+	setup.LoadSampleData()
 
 	router = http.NewRouter()
 	router.AddPath("", &usecases.CodecastSummariesController{})

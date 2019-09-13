@@ -2,21 +2,26 @@ package usecases
 
 import (
 	"fmt"
+	"github.com/jimiolaniyan/gocleanarch"
 	. "github.com/jimiolaniyan/gocleanarch/http"
 )
 
 type CodecastSummariesController struct {
 	DefaultController
-	InputBoundary CodecastSummaryInputBoundary
+	UseCase   CodecastSummariesInputBoundary
+	Presenter CodecastSummariesOutputBoundary
+	View      CodecastSummariesView
 }
 
 func (c *CodecastSummariesController) Handle(request *ParsedRequest) string {
-	c.InputBoundary.SummarizeCodecasts()
+	user := gocleanarch.SessionKeeper.LoggedInUser()
+	c.UseCase.SummarizeCodecasts(user, c.Presenter)
+	c.View.Generate(c.Presenter.GetResponseModel())
 	return ""
 	//useCase := CodecastSummariesUseCase{}
 	//jimi := gocleanarch.UserRepo.FindByName("jimi")
 	//presentableCodecasts := useCase.PresentCodecasts(jimi)
-	//html := CodecastSummariesView{}.toHTML(presentableCodecasts)
+	//html := CodecastSummariesViewImpl{}.toHTML(presentableCodecasts)
 	//return c.MakeResponse(html)
 }
 

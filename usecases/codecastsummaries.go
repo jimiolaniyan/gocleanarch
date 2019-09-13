@@ -10,6 +10,9 @@ import (
 type CodecastSummariesUseCase struct {
 }
 
+type CodecastSummaryResponseModel struct {
+}
+
 func (codecastUseCase *CodecastSummariesUseCase) PresentCodecasts(loggedInUser *entities.User) []*PresentableCodecastSummary {
 	var presentableCodecasts []*PresentableCodecastSummary
 	for _, codecast := range CodecastRepo.FindAllCodecastsSortedChronologically() {

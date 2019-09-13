@@ -14,7 +14,7 @@ func LoadContext() {
 	SessionKeeper = &GateKeeper{}
 }
 
-func SetupSampleData() {
+func LoadSampleData() {
 	LoadContext()
 	jimi := entities.NewUser("jimi")
 	dayo := entities.NewUser("dayo")
@@ -40,4 +40,6 @@ func SetupSampleData() {
 
 	LicenseRepo.Save(jimiE1License)
 	LicenseRepo.Save(jimiE2License)
+
+	SessionKeeper.SetLoggedInUser(jimi)
 }
