@@ -14,7 +14,6 @@ func (useCase *CodecastDetailsUseCase) RequestCodecastDetails(user *entities.Use
 	var found bool
 	if codecast := gocleanarch.CodecastRepo.FindByPermalink(permalink); codecast != nil {
 		found = true
-		CodecastSummariesPresenter{}.FormatSummaryFields(&details.CodecastSummariesResponseModel, codecast, user)
 	}
 	details.Found = found
 	return details

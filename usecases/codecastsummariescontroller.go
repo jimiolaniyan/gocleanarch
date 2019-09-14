@@ -7,7 +7,6 @@ import (
 )
 
 type CodecastSummariesController struct {
-	DefaultController
 	UseCase   CodecastSummariesInputBoundary
 	Presenter CodecastSummariesOutputBoundary
 	View      CodecastSummariesView
@@ -16,13 +15,7 @@ type CodecastSummariesController struct {
 func (c *CodecastSummariesController) Handle(request *ParsedRequest) string {
 	user := gocleanarch.SessionKeeper.LoggedInUser()
 	c.UseCase.SummarizeCodecasts(user, c.Presenter)
-	c.View.Generate(c.Presenter.GetViewModel())
-	return ""
-	//useCase := CodecastSummariesUseCase{}
-	//jimi := gocleanarch.UserRepo.FindByName("jimi")
-	//presentableCodecasts := useCase.PresentCodecasts(jimi)
-	//html := CodecastSummariesViewImpl{}.toHTML(presentableCodecasts)
-	//return c.MakeResponse(html)
+	return c.View.Generate(c.Presenter.GetViewModel())
 }
 
 func checkError(err error, message string) {

@@ -16,10 +16,10 @@ type CodecastSummariesViewImpl struct {
 }
 
 func (c *CodecastSummariesViewImpl) Generate(model *CodecastSummariesViewModel) string {
-	return ""
+	return c.toHTML(model.ViewableCodecastSummaries)
 }
 
-func (c CodecastSummariesViewImpl) toHTML(presentableCodecasts []*CodecastSummariesResponseModel) string {
+func (c CodecastSummariesViewImpl) toHTML(viewableCodecastSummaries []*ViewableCodecastSummary) string {
 	frontPageFilePath, err := filepath.Abs("./web/html/frontpage.html")
 	checkError(err, fmt.Sprintf("Could not open %s", "./web/html/frontpage.html"))
 
@@ -29,11 +29,11 @@ func (c CodecastSummariesViewImpl) toHTML(presentableCodecasts []*CodecastSummar
 	if frontPageTemplate, err := view.CreateTemplate(frontPageFilePath); err == nil {
 		var codecastLines strings.Builder
 
-		for _, pc := range presentableCodecasts {
+		for _, viewableCodecastSummary := range viewableCodecastSummaries {
 			codecastTemplate, _ := view.CreateTemplate(codecastPath)
-			codecastTemplate.Replace("title", pc.Title)
-			codecastTemplate.Replace("publicationDate", pc.PublicationDate)
-			codecastTemplate.Replace("permalink", pc.Permalink)
+			codecastTemplate.Replace("title", viewableCodecastSummary.Title)
+			codecastTemplate.Replace("publicationDate", viewableCodecastSummary.PublicationDate)
+			codecastTemplate.Replace("permalink", viewableCodecastSummary.Permalink)
 
 			//staged
 			codecastTemplate.Replace("thumbnail", "https://cleancoders.com/images/portraits/robert-martin.jpg")

@@ -21,7 +21,6 @@ func NewCodecastPresentation() *codecastPresentation {
 func (c *codecastPresentation) ClearCodecasts() bool {
 	var codecasts = CodecastRepo.FindAllCodecastsSortedChronologically()
 
-	// TODO not a perfect solution
 	for i := len(codecasts) - 1; i >= 0; i-- {
 		CodecastRepo.Delete(codecasts[i])
 	}
@@ -51,22 +50,30 @@ func (c *codecastPresentation) PresentationUser() string {
 }
 
 func (c *codecastPresentation) CountOfCodecastsPresented() int {
-	presentations := c.useCase.PresentCodecasts(SessionKeeper.LoggedInUser())
-	return len(presentations)
+	return len(LoadViewableCodecasts())
+}
+
+func (c *codecastPresentation) CreateLicenseForType(username string, codecastTitle string, licenseType entities.LicenseType) bool {
+	user := UserRepo.FindByName(username)
+	codecast := CodecastRepo.FindByTitle(codecastTitle)
+	var license = entities.NewLicense(licenseType, user, codecast)
+	LicenseRepo.Save(license)
+	return c.useCase.IsLicensedFor(licenseType, user, codecast)
 }
 
 func (c *codecastPresentation) CreateLicenceForViewing(username string, codecastTitle string) bool {
-	user := UserRepo.FindByName(username)
-	codecast := CodecastRepo.FindByTitle(codecastTitle)
-	var license = entities.NewLicense(entities.Viewing, user, codecast)
-	LicenseRepo.Save(license)
-	return c.useCase.IsLicensedFor(entities.Viewing, user, codecast)
+	return c.CreateLicenseForType(username, codecastTitle, entities.Viewing)
 }
 
 func (c *codecastPresentation) CreateLicenceForDownloading(username string, codecastTitle string) bool {
-	user := UserRepo.FindByName(username)
-	codecast := CodecastRepo.FindByTitle(codecastTitle)
-	var license = entities.NewLicense(entities.Downloading, user, codecast)
-	LicenseRepo.Save(license)
-	return c.useCase.IsLicensedFor(entities.Downloading, user, codecast)
+	return c.CreateLicenseForType(username, codecastTitle, entities.Downloading)
+}
+
+func LoadViewableCodecasts() []*usecases.ViewableCodecastSummary {
+	loggedInUser := SessionKeeper.LoggedInUser()
+	useCase := new(usecases.CodecastSummariesUseCase)
+	presenter := &usecases.CodecastSummariesPresenter{}
+	useCase.SummarizeCodecasts(loggedInUser, presenter)
+	viewableCodecastSummaries := presenter.ViewModel.ViewableCodecastSummaries
+	return viewableCodecastSummaries
 }

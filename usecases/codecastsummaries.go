@@ -3,6 +3,7 @@ package usecases
 import (
 	. "github.com/jimiolaniyan/gocleanarch"
 	"github.com/jimiolaniyan/gocleanarch/entities"
+	"time"
 )
 
 // CodecastSummariesUseCase is a use case that handles the presentation of a codecast.
@@ -10,29 +11,23 @@ import (
 type CodecastSummariesUseCase struct {
 }
 
-func (c *CodecastSummariesUseCase) SummarizeCodecasts(*entities.User, CodecastSummariesOutputBoundary) {
-
+type codecastSummary struct {
+	Title           string
+	PublicationDate time.Time
+	Permalink       string
+	IsViewable      bool
+	IsDownloadable  bool
 }
 
 type CodecastSummariesResponseModel struct {
-	Title           string
-	PublicationDate string
-	Permalink       string
-	IsViewable      bool
-	IsDownLoadable  bool
+	CodecastSummaries []*codecastSummary
 }
 
-func (c *CodecastSummariesUseCase) PresentCodecasts(loggedInUser *entities.User) []*CodecastSummariesResponseModel {
-	var presentableCodecasts []*CodecastSummariesResponseModel
-	for _, codecast := range CodecastRepo.FindAllCodecastsSortedChronologically() {
-		presentableCodecasts = append(presentableCodecasts, CodecastSummariesPresenter{}.FormatCodecast(codecast, loggedInUser))
-	}
-	return presentableCodecasts
+func (c *CodecastSummariesResponseModel) addCodecastSummary(summary *codecastSummary) {
+	c.CodecastSummaries = append(c.CodecastSummaries, summary)
 }
 
-
-
-func (codecastUseCase *CodecastSummariesUseCase) IsLicensedFor(licenseType entities.LicenseType, user *entities.User, codecast *entities.Codecast) bool {
+func (c *CodecastSummariesUseCase) IsLicensedFor(licenseType entities.LicenseType, user *entities.User, codecast *entities.Codecast) bool {
 	licenses := LicenseRepo.FindLicensesForUserAndCodecast(user, codecast)
 	for _, l := range licenses {
 		if l.LicenseType() == licenseType {
@@ -42,3 +37,22 @@ func (codecastUseCase *CodecastSummariesUseCase) IsLicensedFor(licenseType entit
 	return false
 }
 
+func (c *CodecastSummariesUseCase) SummarizeCodecasts(loggedInUser *entities.User, presenter CodecastSummariesOutputBoundary) {
+	responseModel := &CodecastSummariesResponseModel{}
+
+	for _, codecast := range CodecastRepo.FindAllCodecastsSortedChronologically() {
+		responseModel.addCodecastSummary(c.summarizeCodecast(codecast, loggedInUser))
+	}
+
+	presenter.Present(responseModel)
+}
+
+func (c *CodecastSummariesUseCase) summarizeCodecast(codecast *entities.Codecast, user *entities.User) *codecastSummary {
+	return &codecastSummary{
+		Title:           codecast.Title(),
+		PublicationDate: codecast.PublicationDate(),
+		Permalink:       codecast.Permalink(),
+		IsViewable:      c.IsLicensedFor(entities.Viewing, user, codecast),
+		IsDownloadable:  c.IsLicensedFor(entities.Downloading, user, codecast),
+	}
+}

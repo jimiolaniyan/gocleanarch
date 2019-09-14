@@ -15,6 +15,7 @@ type PresentCodecastUseCaseSuite struct {
 	user     *entities.User
 	codecast *entities.Codecast
 	useCase  *CodecastSummariesUseCase
+	presenterSpy *CodecastSummaryOutputBoundarySpy
 }
 
 func (suite *PresentCodecastUseCaseSuite) SetupTest() {
@@ -22,6 +23,12 @@ func (suite *PresentCodecastUseCaseSuite) SetupTest() {
 	suite.user = gocleanarch.UserRepo.Save(entities.NewUser("Shakespeare"))
 	suite.codecast = gocleanarch.CodecastRepo.Save(&entities.Codecast{})
 	suite.useCase = new(CodecastSummariesUseCase)
+	suite.presenterSpy = &CodecastSummaryOutputBoundarySpy{}
+}
+
+func (suite *PresentCodecastUseCaseSuite) TestUseCaseWiring() {
+	suite.useCase.SummarizeCodecasts(suite.user, suite.presenterSpy)
+	assert.NotNil(suite.T(), suite.presenterSpy.ResponseModel)
 }
 
 func (suite *PresentCodecastUseCaseSuite) TestUserWithoutViewLicense_CannotViewCodecast() {
@@ -48,43 +55,49 @@ func (suite *PresentCodecastUseCaseSuite) TestUserWithoutViewLicense_CannotViewO
 
 func (suite *PresentCodecastUseCaseSuite) TestPresentingNoCodecasts() {
 	gocleanarch.CodecastRepo.Delete(suite.codecast)
-	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
+	suite.useCase.SummarizeCodecasts(suite.user, suite.presenterSpy)
 
-	assert.True(suite.T(), len(presentableCodeCasts) == 0)
+	assert.True(suite.T(), len(suite.presenterSpy.ResponseModel.CodecastSummaries) == 0)
 }
 
 func (suite *PresentCodecastUseCaseSuite) TestPresentOneCodecast() {
 	suite.codecast.SetTile("Some Title")
-	suite.codecast.SetPublicationDate(time.Date(2011, 5, 22, 00, 00, 00, 000, time.UTC))
+	date := time.Date(2011, 5, 22, 00, 00, 00, 000, time.UTC)
+	suite.codecast.SetPublicationDate(date)
 	suite.codecast.SetPermalink("permalink")
 
-	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
-	pc := presentableCodeCasts[0]
+	presenterSpy := &CodecastSummaryOutputBoundarySpy{}
+	suite.useCase.SummarizeCodecasts(suite.user, presenterSpy)
 
-	assert.True(suite.T(), len(presentableCodeCasts) == 1)
-	assert.True(suite.T(), "Some Title" == pc.Title)
-	assert.True(suite.T(), "5/22/2011" == pc.PublicationDate)
-	assert.True(suite.T(), "permalink" == pc.Permalink)
+	summaries := presenterSpy.ResponseModel.CodecastSummaries;
+	summary := summaries[0]
+
+	assert.True(suite.T(), len(summaries) == 1)
+	assert.True(suite.T(), "Some Title" == summary.Title)
+	assert.True(suite.T(), date == summary.PublicationDate)
+	assert.True(suite.T(), "permalink" == summary.Permalink)
 }
 
 func (suite *PresentCodecastUseCaseSuite) TestPresentedCodecastIsNotViewableIfNoLicense() {
-	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
-	assert.False(suite.T(), presentableCodeCasts[0].IsViewable)
+	suite.useCase.SummarizeCodecasts(suite.user, suite.presenterSpy)
+	summary := suite.presenterSpy.ResponseModel.CodecastSummaries[0]
+	assert.False(suite.T(), summary.IsViewable)
 }
 
 func (suite *PresentCodecastUseCaseSuite) TestPresentedCodecastIsViewableIfLicenseExists() {
 	gocleanarch.LicenseRepo.Save(entities.NewLicense(entities.Viewing, suite.user, suite.codecast))
-	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
-	assert.True(suite.T(), presentableCodeCasts[0].IsViewable)
+	suite.useCase.SummarizeCodecasts(suite.user, suite.presenterSpy)
+	summary := suite.presenterSpy.ResponseModel.CodecastSummaries[0]
+	assert.True(suite.T(), summary.IsViewable)
 }
 
 func (suite *PresentCodecastUseCaseSuite) TestPresentedCodecastIsDownloadableIfDownloadLicenseExists() {
 	license := entities.NewLicense(entities.Downloading, suite.user, suite.codecast)
 	gocleanarch.LicenseRepo.Save(license)
-	presentableCodeCasts := suite.useCase.PresentCodecasts(suite.user)
-	presentableCodecast := presentableCodeCasts[0]
-	assert.True(suite.T(), presentableCodecast.IsDownLoadable)
-	assert.False(suite.T(), presentableCodecast.IsViewable)
+	suite.useCase.SummarizeCodecasts(suite.user, suite.presenterSpy)
+	summary := suite.presenterSpy.ResponseModel.CodecastSummaries[0]
+	assert.True(suite.T(), summary.IsDownloadable)
+	assert.False(suite.T(), summary.IsViewable)
 }
 
 // In order for 'go test' to run this suite, we need to create

@@ -24,6 +24,11 @@ func (c *CodecastSummaryInputBoundarySpy) SummarizeCodecasts(loggedInUser *entit
 
 type CodecastSummaryOutputBoundarySpy struct {
 	ViewModel *CodecastSummariesViewModel
+	ResponseModel *CodecastSummariesResponseModel
+}
+
+func (c *CodecastSummaryOutputBoundarySpy) Present(responseModel *CodecastSummariesResponseModel) {
+	c.ResponseModel = responseModel
 }
 
 func (c *CodecastSummaryOutputBoundarySpy) GetViewModel() *CodecastSummariesViewModel {

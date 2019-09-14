@@ -13,7 +13,7 @@ type RouterTestSuite struct {
 
 var actualRequest = &ParsedRequest{}
 
-func (suite *RouterTestSuite) SetupTest()  {
+func (suite *RouterTestSuite) SetupTest() {
 	suite.router = NewRouter()
 }
 
@@ -53,7 +53,6 @@ func (suite *RouterTestSuite) Test404() {
 }
 
 type TestController struct {
-	DefaultController
 }
 
 func (t *TestController) Handle(request *ParsedRequest) string {

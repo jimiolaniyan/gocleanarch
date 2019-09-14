@@ -3,9 +3,10 @@ package usecases
 import "github.com/jimiolaniyan/gocleanarch/entities"
 
 type CodecastSummariesInputBoundary interface {
-	SummarizeCodecasts(*entities.User, CodecastSummariesOutputBoundary)
+	SummarizeCodecasts(loggedInUser *entities.User, presenter CodecastSummariesOutputBoundary)
 }
 
 type CodecastSummariesOutputBoundary interface {
 	GetViewModel() *CodecastSummariesViewModel
+	Present(responseModel *CodecastSummariesResponseModel)
 }

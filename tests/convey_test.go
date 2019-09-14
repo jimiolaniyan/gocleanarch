@@ -40,7 +40,7 @@ func TestGivenNoCodecastsPresentNoCodecasts(t *testing.T) {
 
 func TestPresentViewableCodecastsInChronologicalOrder(t *testing.T) {
 	user := "U"
-	codecast := "A"
+	codecast := "ViewableCodecastSummaries"
 	Convey("Given codecasts", t, func() {
 		res := createCodeCasts()
 		So(res, ShouldEqual, true)
@@ -56,7 +56,7 @@ func TestPresentViewableCodecastsInChronologicalOrder(t *testing.T) {
 		So(out, ShouldEqual, true)
 	})
 
-	Convey("And with license for U able to view A", t, func() {
+	Convey("And with license for U able to view ViewableCodecastSummaries", t, func() {
 		status := fixtures.CodecastPresentation.CreateLicenceForViewing(user, codecast)
 		So(status, ShouldEqual, true)
 
@@ -67,7 +67,7 @@ func TestPresentViewableCodecastsInChronologicalOrder(t *testing.T) {
 			presentedCodecasts := fixtures.Query()
 			expected := []fixtures.QueryResponse{
 				{Title: "C", Picture: "C", Description: "C", Viewable: false},
-				{Title: "A", Picture: "A", Description: "A", Viewable: true},
+				{Title: "ViewableCodecastSummaries", Picture: "ViewableCodecastSummaries", Description: "ViewableCodecastSummaries", Viewable: true},
 				{Title: "B", Picture: "B", Description: "B", Viewable: false},
 			}
 			So(presentedCodecasts, ShouldResemble, expected)
@@ -82,7 +82,7 @@ func TestPresentViewableCodecastsInChronologicalOrder(t *testing.T) {
 
 func TestPresentDownloadableCodecastsInChronologicalOrder(t *testing.T) {
 	user := "U"
-	codecast := "A"
+	codecast := "ViewableCodecastSummaries"
 	Convey("Given codecasts", t, func() {
 		res := createCodeCasts()
 		So(res, ShouldEqual, true)
@@ -98,7 +98,7 @@ func TestPresentDownloadableCodecastsInChronologicalOrder(t *testing.T) {
 		So(out, ShouldEqual, true)
 	})
 
-	Convey("And with license for U able to download A", t, func() {
+	Convey("And with license for U able to download ViewableCodecastSummaries", t, func() {
 		status := fixtures.CodecastPresentation.CreateLicenceForDownloading(user, codecast)
 		So(status, ShouldEqual, true)
 
@@ -109,7 +109,7 @@ func TestPresentDownloadableCodecastsInChronologicalOrder(t *testing.T) {
 			presentedCodecasts := fixtures.Query()
 			expected := []fixtures.QueryResponse{
 				{Title: "C", Picture: "C", Description: "C", Viewable: false},
-				{Title: "A", Picture: "A", Description: "A", Viewable: false, Downloadable: true},
+				{Title: "ViewableCodecastSummaries", Picture: "ViewableCodecastSummaries", Description: "ViewableCodecastSummaries", Viewable: false, Downloadable: true},
 				{Title: "B", Picture: "B", Description: "B", Viewable: false},
 			}
 			So(presentedCodecasts, ShouldResemble, expected)
@@ -127,7 +127,7 @@ func TestShowEpisode(t *testing.T) {
 	permalink := "episode-1"
 
 	Convey("Given Codecasts", t, func() {
-		gc := fixtures.GivenCodecast{Title: "A", PublicationDate: "3/1/2014", Permalink: permalink}
+		gc := fixtures.GivenCodecast{Title: "ViewableCodecastSummaries", PublicationDate: "3/1/2014", Permalink: permalink}
 		ok := gc.Execute()
 		So(ok, ShouldEqual, true)
 	})
@@ -146,11 +146,11 @@ func TestShowEpisode(t *testing.T) {
 			ok := details.RequestCodecast(permalink)
 			So(ok, ShouldBeTrue)
 
-			Convey("Then the presented title is A, published 3/01/2014", func() {
+			Convey("Then the presented title is ViewableCodecastSummaries, published 3/01/2014", func() {
 				title := details.CodecastDetailsTitle()
 				date := details.CodecastDetailsDate()
 
-				So(title, ShouldEqual, "A")
+				So(title, ShouldEqual, "ViewableCodecastSummaries")
 				So(date, ShouldEqual, "3/01/2014")
 			})
 
@@ -169,7 +169,7 @@ func TestShowEpisode(t *testing.T) {
 }
 
 func createCodeCasts() bool {
-	var codecast1 = fixtures.GivenCodecast{Title: "A", PublicationDate: "3/1/2014"}
+	var codecast1 = fixtures.GivenCodecast{Title: "ViewableCodecastSummaries", PublicationDate: "3/1/2014"}
 	var codecast2 = fixtures.GivenCodecast{Title: "B", PublicationDate: "3/2/2014"}
 	var codecast3 = fixtures.GivenCodecast{Title: "C", PublicationDate: "2/18/2014"}
 
