@@ -122,52 +122,6 @@ func TestPresentDownloadableCodecastsInChronologicalOrder(t *testing.T) {
 	})
 }
 
-func TestShowEpisode(t *testing.T) {
-	user := "U"
-	permalink := "episode-1"
-
-	Convey("Given Codecasts", t, func() {
-		gc := fixtures.GivenCodecast{Title: "ViewableCodecastSummaries", PublicationDate: "3/1/2014", Permalink: permalink}
-		ok := gc.Execute()
-		So(ok, ShouldEqual, true)
-	})
-
-	Convey("And a user U", t, func() {
-		ok := fixtures.CodecastPresentation.AddUser(user)
-		So(ok, ShouldEqual, true)
-	})
-
-	Convey("With U logged in", t, func() {
-		ok := fixtures.CodecastPresentation.LoginUser(user)
-		So(ok, ShouldEqual, true)
-
-		Convey("When the user requests details for codecast episode-1", func() {
-			details := fixtures.CodecastDetails{}
-			ok := details.RequestCodecast(permalink)
-			So(ok, ShouldBeTrue)
-
-			Convey("Then the presented title is ViewableCodecastSummaries, published 3/01/2014", func() {
-				title := details.CodecastDetailsTitle()
-				date := details.CodecastDetailsDate()
-
-				So(title, ShouldEqual, "ViewableCodecastSummaries")
-				So(date, ShouldEqual, "3/01/2014")
-			})
-
-			Convey("With option to purchase viewing license", func() {
-				requestViewing := details.CodecastDetailsOfferPurchaseOf("viewing")
-				So(requestViewing, ShouldBeTrue)
-			})
-
-			Convey("And option to purchase download license", func() {
-				downloadViewing := details.CodecastDetailsOfferPurchaseOf("download")
-				So(downloadViewing, ShouldBeTrue)
-			})
-		})
-
-	})
-}
-
 func createCodeCasts() bool {
 	var codecast1 = fixtures.GivenCodecast{Title: "ViewableCodecastSummaries", PublicationDate: "3/1/2014"}
 	var codecast2 = fixtures.GivenCodecast{Title: "B", PublicationDate: "3/2/2014"}
